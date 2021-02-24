@@ -4,7 +4,7 @@
 # @Email: thepoy@aliyun.com
 # @File Name: main.py
 # @Created: 2021-02-19 16:43:08
-# @Modified: 2021-02-24 15:48:17
+# @Modified: 2021-02-24 21:01:47
 
 import os
 import sys
@@ -20,7 +20,7 @@ api = Api()
 
 localization = {
     'global.quitConfirmation': u'你真的要退出吗？',
-    'global.ok': u'确认',
+    # 'global.ok': u'确认',
     # 'global.quit': u'退出',
     # 'global.cancel': u'取消',
     # 'global.saveFile': u'保存文件',
@@ -46,8 +46,7 @@ webview.create_window(
     height=520,
     width=640,
     min_size=(520, 640),
-    #   confirm_close=True,
     text_select=False,
 )
 
-webview.start(debug=True, localization=localization)
+webview.start(debug=False, localization=localization)
