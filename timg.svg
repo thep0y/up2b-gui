@@ -1,15 +1,20 @@
 <svg width="400" height="400" xmlns="http://www.w3.org/2000/svg">
  <!-- Created with Method Draw - http://github.com/duopixel/Method-Draw/ -->
+ <defs>
+  <filter id="svg_2_blur">
+   <feGaussianBlur stdDeviation="0.1" in="SourceGraphic"/>
+  </filter>
+ </defs>
  <g>
   <title>background</title>
-  <rect fill="none" id="canvas_background" height="402" width="402" y="-1" x="-1"/>
+  <rect fill="#ffffff" id="canvas_background" height="402" width="402" y="-1" x="-1"/>
   <g display="none" overflow="visible" y="0" x="0" height="100%" width="100%" id="canvasGrid">
    <rect fill="url(#gridpattern)" stroke-width="0" y="0" x="0" height="100%" width="100%"/>
   </g>
  </g>
  <g>
   <title>Layer 1</title>
-  <text font-weight="bold" stroke="#000" transform="matrix(16.06283187866211,0,0,14.421713829040526,-1650.0659313201907,-928.861684858799) " xml:space="preserve" text-anchor="start" font-family="'Times New Roman', Times, serif" font-size="24" id="svg_1" y="85.754518" x="105.309322" stroke-width="0" fill="#000000">T</text>
-  <text style="cursor: move;" font-weight="normal" font-style="italic" stroke="#000" transform="matrix(2.0424992463523353,0,0,2.1775278454345535,-378.91265605564496,-139.6929880315002) " xml:space="preserve" text-anchor="start" font-family="'Courier New', Courier, monospace" font-size="24" id="svg_2" y="205.254935" x="303.18563" stroke-opacity="null" stroke-width="0" fill="#565656">img</text>
+  <text font-weight="normal" transform="matrix(17.8079, 0, 0, 13.64, -1605.16, -1429.73)" xml:space="preserve" text-anchor="start" font-family="'Times New Roman', Times, serif" font-size="24" id="svg_1" y="128.110317" x="91.344543" stroke-width="0" stroke="#000" fill="#000000">T</text>
+  <text filter="url(#svg_2_blur)" font-weight="bold" opacity="0.44" font-style="italic" transform="matrix(3.53496, 0, 0, 4.78009, -640.782, -1039.85)" xml:space="preserve" text-anchor="start" font-family="'Courier New', Courier, monospace" font-size="29" id="svg_2" y="270.647665" x="235.062892" stroke-opacity="null" stroke-width="0" stroke="#000" fill="#000000">img</text>
  </g>
 </svg>
