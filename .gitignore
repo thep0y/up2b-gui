@@ -127,3 +127,4 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+WebBrowserInterop.x64.dll
