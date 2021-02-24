@@ -1,0 +1,154 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    height: 100%;
+}
+
+body {
+    height: 100%;
+    color: #333;
+    /*font-size: 22pt;*/
+}
+
+#status {
+    position: absolute;
+    z-index: 1;
+    right: 10px;
+    top: 6px;
+    height: 30px;
+    line-height: 30px;
+}
+
+#status:hover {
+    cursor: default;
+}
+
+.layui-tab {
+    min-height: 100%;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.layui-tab-title li {
+    font-size: 20px;
+}
+
+form {
+    font-size: 14px;
+}
+
+.layui-input {
+    width: 359px;
+}
+
+#config hr {
+    width: 469px;
+}
+
+#config {
+    position: relative;
+    margin: 0 auto;
+    /* margin-left: 9px; */
+    width: 469px;
+}
+
+.layui-form-item .layui-input-inline {
+    width: 350px;
+}
+
+
+.configed-button {
+    margin-bottom: 10px;
+}
+
+.configed-button legend {
+    font-size: 18px;
+}
+
+.configed-button div {
+    margin: 10px 15px 10px;
+}
+
+#configed-beds-list button[class="layui-btn"]:hover {
+    cursor: default;
+}
+
+#upload {
+    width: 100%;
+}
+
+.layui-form-switch {
+    height: 24px;
+}
+
+/*.layui-upload-drag {
+    padding: 120px;
+}
+*/
+
+.site-flow {
+    overflow: auto;
+    text-align: center;
+}
+
+.site-flow img {
+    max-width: 40%;
+    max-height: 100px;
+    /*height: 200px;*/
+    margin: 0 10px 10px 0;
+    border: none;
+    box-shadow: 3px 3px 7px -1px #333;
+}
+
+#configed-beds-list>button {
+    margin: 4px;
+}
+
+.flow-default li {
+    position: relative;
+    display: inline-block;
+    margin: 0 10px;
+    font-size: 14px;
+    width: 220px;
+    margin-bottom: 10px;
+    height: 180px;
+    line-height: 100px;
+    text-align: center;
+    background-color: #b0b0b0;
+    /*background-image: radial-gradient(#005850 25%, #009688 40%, #fff 70%);*/
+    background-image: linear-gradient(#FFF 50%, #dadada 95%);
+}
+
+.flow-default li img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    max-width: 100%;
+    max-height: 100%;
+    box-shadow: 0px 3px 7px 0px #037b6e;
+}
+
+#all-images button.layui-btn.layui-btn-sm {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+#all-images button.layui-btn.layui-btn-sm:hover {
+    background-color: #009688;
+}
+
+#status .layui-badge {
+    height: 18px;
+    line-height: 20px;
+}
+
+button.layui-btn.layui-btn-sm.copy-url {
+    margin-right: 40px;
+}

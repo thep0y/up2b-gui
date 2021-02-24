@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>TIMG</title>
+    <script src="layui/layui.all.js"></script>
+    <link rel="stylesheet" href="layui/css/layui.css">
+    <link rel="stylesheet" href="css/index.css">
+</head>
+
+<body>
+    <button class="layui-btn layui-btn-radius" id="status" title="单击刷新当前图床">未配置图床<span id="images-count" class="layui-badge layui-bg-gray"></span></button>
+    <div class="layui-tab layui-tab-card" lay-filter="docDemoTabBrief">
+        <ul class="layui-tab-title">
+            <li class="layui-this">上传图片</li>
+            <li title="已选图床里的所有图片">所有图片</li>
+            <li>配置图床</li>
+        </ul>
+        <div class="layui-tab-content">
+            <div class="layui-tab-item layui-show">
+                <div class="layui-upload-drag" id="upload">
+                    <i class="layui-icon"></i>
+                    <p>点击上传（暂不支持文件拖拽）</p>
+                    <div class="layui-hide" id="uploadView">
+                          <hr>
+                          <img src="" alt="上传成功后渲染" style="max-width: 100%">
+                    </div>
+                </div>
+                <fieldset class="layui-elem-field layui-field-title" style="margin-top: 50px;">
+                  <legend>已上传图片</legend>
+                </fieldset>
+                <div class="site-flow" id="uploaded-images">
+                </div>
+            </div>
+            <div class="layui-tab-item">
+                <ul class="flow-default" id="all-images">         
+                </ul>
+            </div>
+            <div class="layui-tab-item" id="config">
+                <form class="layui-form layui-form-pane" id="image-bed-form" action="javascript:;" lay-filter="image-bed-form">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">配置图床</label>
+                        <div class="layui-input-inline">
+                            <select name="image-bed" id="image-bed" lay-verify="required">
+                                <option value="">请选择要使用的图床</option>
+                            </select>
+                        </div>
+                    </div>
+                    <hr class="layui-bg-green">
+                    <div id="image-bed-conf-block">
+                    </div>
+                    <div style="width: 469px; margin: 0;">
+                        <button class="layui-btn layui-btn-fluid" lay-submit="" id="login" lay-filter="init-image-bed">确认</button>
+                    </div>
+                </form>
+                <br>
+                <blockquote class="layui-elem-quote" style="width: 469px; margin: 0;">重复修改某图床的配置会覆盖已保存的旧的配置</blockquote>
+                <hr class="layui-bg-green">
+                <form class="layui-form layui-form-pane" id="toggle-automatic-compression" lay-filter="toggle-automatic-compression">                    
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" title="试验功能，可能有问题，不建议启用"><span class="layui-badge-dot layui-bg-orange"></span>&nbsp;&nbsp;自动压缩</label>
+                        <div class="layui-input-inline">
+                            <input type="checkbox" name="aac" id="aac" lay-skin="switch" lay-text="开启|关闭" lay-filter="aac">
+                        </div>
+                    </div>
+                </form>
+                <fieldset class="layui-elem-field configed-button">
+                    <legend>切换图床</legend>
+                    <div id="configed-beds-list"></div>
+                </fieldset>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/index.js"></script>
+</body>
+
+</html>
