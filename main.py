@@ -4,7 +4,7 @@
 # @Email: thepoy@aliyun.com
 # @File Name: main.py
 # @Created: 2021-02-19 16:43:08
-# @Modified: 2021-02-24 21:01:47
+# @Modified: 2021-02-25 10:32:18
 
 import os
 import sys
@@ -39,14 +39,26 @@ localization = {
     # 'linux.openFolder': u'打开文件夹',
 }
 
-webview.create_window(
-    "TIMG",
-    "assets/index.html",
-    js_api=api,
-    height=520,
-    width=640,
-    min_size=(520, 640),
-    text_select=False,
-)
-
-webview.start(debug=False, localization=localization)
+if sys.platform == "win32":
+    webview.create_window(
+        "TIMG",
+        "assets/index.html",
+        js_api=api,
+        height=524,
+        width=640,
+        min_size=(524, 640),
+        text_select=False,
+    )
+    webview.start(debug=False, localization=localization, gui="edgechromium")
+    # webview.start(debug=False, localization=localization, gui="edgehtml")
+else:
+    webview.create_window(
+        "TIMG",
+        "assets/index.html",
+        js_api=api,
+        height=520,
+        width=640,
+        min_size=(520, 640),
+        text_select=False,
+    )
+    webview.start(debug=False, localization=localization)

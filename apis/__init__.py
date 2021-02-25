@@ -4,8 +4,9 @@
 # @Email: thepoy@aliyun.com
 # @File Name: __init__.py
 # @Created: 2021-02-19 16:42:55
-# @Modified: 2021-02-24 15:50:11
+# @Modified: 2021-02-25 10:43:39
 
+import sys
 import webview
 
 from typing import Dict
@@ -109,11 +110,12 @@ class Api:
         return response
 
     def view_image_in_new_windows(self, url: str, width: int, height: int):
+        is_windows = sys.platform == "win32"
         webview.create_window(
             "查看图片",
             html="<img src='%s'></img>" % url,
-            width=width + 20,
-            height=height + 20,
+            width=width + 30 if is_windows else width + 20,
+            height=height + 72 if is_windows else height + 20,
         )
 
     def delete_image(self, *args):
