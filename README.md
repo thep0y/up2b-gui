@@ -4,9 +4,7 @@
 
 基于[pywebview](https://github.com/r0x0r/pywebview)和[timg](https://github.com/thep0y/timg)写的图床管理软件。
 
-
-
-<video src="https://cdn.jsdelivr.net/gh/thep0y/image-bed/videos/output.webm"></video>
+![demo](https://cdn.jsdelivr.net/gh/thep0y/image-bed/md/timg-gui-demo.webp)
 
 ## 特点
 
