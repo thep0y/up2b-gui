@@ -7,6 +7,21 @@ var conf
 var bedList = new Array
 var allImages, pages
 var pageSize = 12
+var currentTagIndex = parseInt(localStorage.getItem("currentTagIndex"))
+
+
+if (!isNaN(currentTagIndex)) {
+    let ul = document.getElementsByClassName("layui-tab-title")[0]
+    autoClick(ul.children[currentTagIndex])
+}
+
+//模拟点击，切换tab
+function autoClick(el) {
+    var evt = document.createEvent("MouseEvents");
+    evt.initEvent("click", true, true);
+    el.dispatchEvent(evt);
+}
+
 
 form.render()
 
@@ -14,10 +29,18 @@ window.addEventListener('pywebviewready', function () {
     showImageBeds()
 })
 
-// 页面刷新事件
-// window.onunload = function(e) {
-//     showImageBeds()
-// }
+// 页面刷新前
+window.onbeforeunload = function (e) {
+    let li = document.getElementsByClassName("layui-this")[0]
+    let index = 0
+    while (li) {
+        li = li.previousSibling
+        if (li != null && li.nodeName == "LI") {
+            index++
+        }    
+    }
+    localStorage.setItem("currentTagIndex", index)
+}
 
 var baseHTML = `<div class="layui-form-item">
 <label class="layui-form-label">用户名</label>
@@ -240,16 +263,6 @@ $("#upload").click(() => {
     })
 })
 
-// 加载所有图片
-// flow.load({
-//     elem: '#all-images' //流加载容器
-//     ,done: function(page, next){ //执行下一页的回调
-//         var list = pagination(pageSize, page, allImages)
-
-//         next(list.join(''), page < pages)
-//     }
-// });
-
 function copyImageURL(element) {
     let url = element.getAttribute("data-url")
     if (!url) {
@@ -313,6 +326,7 @@ function getAllImages() {
         status.innerHTML += '<span id="images-count" class="layui-badge layui-bg-gray">' + allImages.length + '</span>'
         pages = ~~(allImages.length / pageSize) + 1
         let bedCode = document.getElementById("status").getAttribute("data-id")
+        /*  // 所有图片分页加载
         flow.load({
             elem: '#all-images' //流加载容器
                 ,
@@ -338,6 +352,31 @@ function getAllImages() {
                 })
                 next(lis.join(''), page < pages)
             }
+        });
+        */
+        // 所有图片 按当前屏区域加载
+        let allImagesTag = document.getElementById("all-images")
+        let html = ""
+        allImages.forEach((value) => {
+            let li = '<li><img lay-src="'
+            switch (bedCode) {
+                case "0":
+                    li += value.url + '" delete-url="' + value.delete_url + '" data-width="' + value.width + '" data-height="' + value.height
+                    break
+                case "1":
+                    li += value.display_url + '" data-id="' + value.id + '" data-width="' + value.width + '" data-height="' + value.height + '" data-url="' + value.url
+                    break
+                case "2":
+                case "3":
+                    li += value.url + '" delete-url="' + value.delete_url + '" data-sha="' + value.sha
+                    break
+            }
+            li += '" onclick="viewImage(this)"></img><button type="button" class="layui-btn layui-btn-sm copy-url" title="复制链接" onclick="copyImageURL(this.parentNode.firstElementChild)"><i class="layui-icon layui-icon-file"></i></button><button type="button" class="layui-btn layui-btn-sm delete-image" title="删除"><i class="layui-icon layui-icon-delete"></i></button></li>'
+            html += li
+        })
+        allImagesTag.innerHTML = html
+        flow.lazyimg({
+            elem: '#all-images img'
         });
     })
 }
@@ -445,5 +484,9 @@ $("#all-images").on("click", ".delete-image", function (event) {
 })
 
 $("#status").click((event) => {
-    location.reload()
+    if (document.getElementById("status").getAttribute("data-id") !== null) {
+        location.reload()
+    }
 })
+
+

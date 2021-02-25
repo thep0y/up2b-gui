@@ -4,7 +4,7 @@
 # @Email: thepoy@aliyun.com
 # @File Name: main.py
 # @Created: 2021-02-19 16:43:08
-# @Modified: 2021-02-25 11:39:09
+# @Modified: 2021-02-25 18:54:46
 
 import os
 import sys
@@ -51,7 +51,7 @@ if sys.platform == "win32":
         min_size=(524, 640),
         text_select=False,
     )
-    webview.start(debug=False, localization=localization, gui="edgechromium")
+    webview.start(debug=True, localization=localization, gui="edgechromium")
     # webview.start(debug=False, localization=localization, gui="edgehtml")
 else:
     webview.create_window(
@@ -63,4 +63,4 @@ else:
         min_size=(520, 640),
         text_select=False,
     )
-    webview.start(debug=False, localization=localization)
+    webview.start(debug=True, localization=localization)

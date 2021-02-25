@@ -4,8 +4,9 @@
 # @Email: thepoy@aliyun.com
 # @File Name: __init__.py
 # @Created: 2021-02-19 16:42:55
-# @Modified: 2021-02-25 10:43:39
+# @Modified: 2021-02-25 21:07:34
 
+import os
 import sys
 import webview
 
@@ -17,6 +18,7 @@ from timg.timglib.timg_api.imgtu import Imgtu
 from timg.timglib.timg_api.gitee import Gitee
 from timg.timglib.timg_api.github import Github
 from timg.timglib.constants import IMAGE_BEDS_CODE, SM_MS, IMGTU, GITEE, GITHUB
+from timg.timglib.errors import OverSizeError, UploadFailed
 from apis.utils import read_config
 from apis.errors import InvalidImageBedCode
 
@@ -31,7 +33,7 @@ class Api:
     def show_image_beds(self):
         conf = read_config(CONF_FILE)
         selected = conf.get("image_bed", None)
-        if selected >= 0:
+        if type(selected) == int and selected >= 0:
             self.image_bed = IMAGE_BEDS[selected]()
             self.image_bed.auto_compress = self.auto_compress
         response = {
@@ -80,7 +82,13 @@ class Api:
             return response
         urls = []
         if image_paths:
-            urls = self.image_bed.upload_images(image_paths)
+            try:
+                urls = self.image_bed.upload_images(image_paths)
+            except OverSizeError as e:
+                return {"success": False, "error": f"图片超限了 - {e}"}
+            except UploadFailed as e:
+                return {"success": False, "error": f"图床返回错误 - {e}"}
+
         response = {"success": True, "image_urls": urls}
         return response
 
@@ -111,8 +119,9 @@ class Api:
 
     def view_image_in_new_windows(self, url: str, width: int, height: int):
         is_windows = sys.platform == "win32"
+        image_name = os.path.basename(url)
         webview.create_window(
-            "查看图片",
+            image_name,
             html="<img src='%s'></img>" % url,
             width=width + 30 if is_windows else width + 20,
             height=height + 72 if is_windows else height + 20,

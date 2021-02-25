@@ -131,3 +131,7 @@ dmypy.json
 WebBrowserInterop.x64.dll
 build.txt
 TIMG.desktop
+
+# tests
+images/
+images_download.py

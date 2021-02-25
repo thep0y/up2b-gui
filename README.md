@@ -1,10 +1,18 @@
+[电报群](https://t.me/pytimg)
+
 # TIMG
 
 基于[pywebview](https://github.com/r0x0r/pywebview)和[timg](https://github.com/thep0y/timg)写的图床管理软件。
 
+
+
+<video src="https://cdn.jsdelivr.net/gh/thep0y/image-bed/videos/output.webm"></video>
+
 ## 特点
 
-> Linux系统暂时不更新，用户少，所以懒得弄，虽然我是在linux上写的
+> Linux系统暂时不更新，用户少，所以懒得弄，虽然我是在linux上写的。
+>
+> 等有linux用户反馈的时候，我再补充linux的相关说明和文件。
 
 支持以下图床的管理：
 
@@ -18,6 +26,7 @@
 当前为测试版，功能有：
 
 - 上传图片
+  - 多图上传，一次最多上传10张图片
   - 上传成功后单击图片即可复制图片链接
 - 查看所有图片
   - 12张图片为一组
@@ -55,3 +64,14 @@ python main.py
 ```
 
 此时就可以上传图片、查看图片和管理图片了。
+
+当然，第一次使用需要在配置图床，**配置**或**修改**后的图床会被设置为当前正在使用的图床。
+
+## 附言
+
+因为依赖`timg`，所以也就可以根据[timg](https://github.com/thep0y/timg)的README在`Typora`中使用。
+
+## 当前发现的一些问题
+
+- [ ] windows上以edge chromium运行时，如果是两列图片的宽度，点击复制按钮图片布局会变成靠左的一列，linux上无此问题。暂未发现原因在哪儿。
+
