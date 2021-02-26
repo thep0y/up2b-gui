@@ -135,3 +135,5 @@ TIMG.desktop
 # tests
 images/
 images_download.py
+
+tools/

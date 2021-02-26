@@ -35,7 +35,8 @@
     - 批量删除功能未实现
 - 一键切换图床
 - 自动压缩图片
-  - 此功能不实用，不建议开启。
+  - 仅对jpg和png格式的图片有效
+  - 此功能不实用，不建议开启
 
 ## 安装
 
@@ -52,6 +53,12 @@ pip install -r requirements.txt
 ```
 
 仅在`Windows 10`和`ArchLinux(KDE)`上测试。
+
+**windows上使用Python3.9时需注意**
+
+截止目前(2021.02.26)，pythonnet的支持3.9的wheel并未上传到pypi，所以需要手动下载安装。
+
+[Python Extension Packages for Windows - Christoph Gohlke (uci.edu)](https://www.lfd.uci.edu/~gohlke/pythonlibs/#pythonnet)
 
 ## 使用
 
@@ -71,5 +78,5 @@ python main.py
 
 ## 当前发现的一些问题
 
-- [ ] windows上以edge chromium运行时，如果是两列图片的宽度，点击复制按钮图片布局会变成靠左的一列，linux上无此问题。暂未发现原因在哪儿。
+- [x] windows上以edge chromium运行时，如果是两列图片的宽度，点击复制按钮图片布局会变成靠左的一列，linux上无此问题。暂未发现原因在哪儿。
 

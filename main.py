@@ -4,7 +4,7 @@
 # @Email: thepoy@aliyun.com
 # @File Name: main.py
 # @Created: 2021-02-19 16:43:08
-# @Modified: 2021-02-25 18:54:46
+# @Modified: 2021-02-26 16:45:50
 
 import os
 import sys
@@ -16,7 +16,7 @@ if sys.platform == "linux":
     # os.environ["QT_AUTO_SCREEN_SCALE_FACTOR"] = "1"  # 自动配置缩放，可能会使用不正确的缩放比例
     os.environ["QT_SCALE_FACTOR"] = "1.5"
 
-__version__ = "0.0.2alpha"
+__version__ = "0.0.3alpha"
 
 api = Api()
 
@@ -41,26 +41,29 @@ localization = {
     # 'linux.openFolder': u'打开文件夹',
 }
 
+min_width, min_height = 520, 640
+
 if sys.platform == "win32":
+    min_width = 542
     webview.create_window(
-        "TIMG",
+        f"TIMG {__version__}",
         "assets/index.html",
         js_api=api,
-        height=524,
-        width=640,
-        min_size=(524, 640),
+        width=min_width,
+        height=min_height,
+        min_size=(min_width, min_height),
         text_select=False,
     )
-    webview.start(debug=True, localization=localization, gui="edgechromium")
+    webview.start(debug=False, localization=localization, gui="edgechromium")
     # webview.start(debug=False, localization=localization, gui="edgehtml")
 else:
     webview.create_window(
-        "TIMG",
+        f"TIMG {__version__}",
         "assets/index.html",
         js_api=api,
-        height=520,
-        width=640,
-        min_size=(520, 640),
+        width=min_width,
+        height=min_height,
+        min_size=(min_width, min_height),
         text_select=False,
     )
-    webview.start(debug=True, localization=localization)
+    webview.start(debug=False, localization=localization)
