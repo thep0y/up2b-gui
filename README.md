@@ -62,6 +62,10 @@ pip install -r requirements.txt
 
 ## 使用
 
+本项目提供路过图床(imgtu.com)的测试账号用于体验，用户名和密码皆为`timg_test`，请勿将测试账号用于非法用途。
+
+
+
 进入项目根目录，执行：
 
 ```shell

@@ -144,6 +144,10 @@ form {
     background-color: #009688;
 }
 
+#all-images i.layui-icon {
+    margin: 0;
+}
+
 #status .layui-badge {
     height: 18px;
     line-height: 20px;

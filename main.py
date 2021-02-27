@@ -4,7 +4,7 @@
 # @Email: thepoy@aliyun.com
 # @File Name: main.py
 # @Created: 2021-02-19 16:43:08
-# @Modified: 2021-02-27 15:08:24
+# @Modified: 2021-02-27 17:52:12
 
 import os
 import sys
@@ -42,28 +42,25 @@ localization = {
 }
 
 min_width, min_height = 520, 640
+debug = True
+title = f"TIMG {__version__} debug" if debug else f"TIMG {__version__}"
+index = "assets/index.html"
 
 if sys.platform == "win32":
     min_width = 542
-    webview.create_window(
-        f"TIMG {__version__}",
-        "assets/index.html",
-        js_api=api,
-        width=min_width,
-        height=min_height,
-        min_size=(min_width, min_height),
-        text_select=False,
-    )
-    webview.start(debug=False, localization=localization, gui="edgechromium")
-    # webview.start(debug=False, localization=localization, gui="edgehtml")
+
+webview.create_window(
+    title,
+    index,
+    js_api=api,
+    width=min_width,
+    height=min_height,
+    min_size=(min_width, min_height),
+    text_select=False,
+)
+
+if sys.platform == "win32":
+    webview.start(debug=debug, localization=localization, gui="edgechromium")
+    # webview.start(debug=debug, localization=localization, gui="edgehtml")
 else:
-    webview.create_window(
-        f"TIMG {__version__}",
-        "assets/index.html",
-        js_api=api,
-        width=min_width,
-        height=min_height,
-        min_size=(min_width, min_height),
-        text_select=False,
-    )
-    webview.start(debug=False, localization=localization)
+    webview.start(debug=debug, localization=localization)

@@ -37,7 +37,7 @@ window.onbeforeunload = function (e) {
         li = li.previousSibling
         if (li != null && li.nodeName == "LI") {
             index++
-        }    
+        }
     }
     localStorage.setItem("currentTagIndex", index)
 }
@@ -371,7 +371,7 @@ function getAllImages() {
                     li += value.url + '" delete-url="' + value.delete_url + '" data-sha="' + value.sha
                     break
             }
-            li += '" onclick="viewImage(this)"></img><button type="button" class="layui-btn layui-btn-sm copy-url" title="复制链接" onclick="copyImageURL(this.parentNode.firstElementChild)"><i class="layui-icon layui-icon-file"></i></button><button type="button" class="layui-btn layui-btn-sm delete-image" title="删除"><i class="layui-icon layui-icon-delete"></i></button></li>'
+            li += '" title="点击图片可在新窗口查看原尺寸图片" onclick="viewImage(this)"></img><button type="button" class="layui-btn layui-btn-sm copy-url" title="复制链接" onclick="copyImageURL(this.parentNode.firstElementChild)"><i class="layui-icon layui-icon-file"></i></button><button type="button" class="layui-btn layui-btn-sm delete-image" title="删除"><i class="layui-icon layui-icon-delete"></i></button></li>'
             html += li
         })
         allImagesTag.innerHTML = html
@@ -488,5 +488,3 @@ $("#status").click((event) => {
         location.reload()
     }
 })
-
-
