@@ -4,7 +4,7 @@
 
 基于[pywebview](https://github.com/r0x0r/pywebview)和[timg](https://github.com/thep0y/timg)写的图床管理软件。
 
-![demo](https://cdn.jsdelivr.net/gh/thep0y/image-bed/md/timg-gui-demo.webp)
+![demo](https://github.com/thep0y/image-bed/raw/main/md/timg-gui-demo.webp)
 
 ## 特点
 
@@ -71,6 +71,8 @@ python main.py
 此时就可以上传图片、查看图片和管理图片了。
 
 当然，第一次使用需要在配置图床，**配置**或**修改**后的图床会被设置为当前正在使用的图床。
+
+图片上传成功后，记得点击椭圆形的图床按钮刷新才能在`所有图片`里加载（未来会改为上传成功后即添加到`所有图片`里）
 
 ## 附言
 

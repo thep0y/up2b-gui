@@ -4,7 +4,7 @@
 # @Email: thepoy@aliyun.com
 # @File Name: main.py
 # @Created: 2021-02-19 16:43:08
-# @Modified: 2021-02-26 16:45:50
+# @Modified: 2021-02-27 15:08:24
 
 import os
 import sys
@@ -16,7 +16,7 @@ if sys.platform == "linux":
     # os.environ["QT_AUTO_SCREEN_SCALE_FACTOR"] = "1"  # 自动配置缩放，可能会使用不正确的缩放比例
     os.environ["QT_SCALE_FACTOR"] = "1.5"
 
-__version__ = "0.0.3alpha"
+__version__ = "0.0.4alpha"
 
 api = Api()
 
