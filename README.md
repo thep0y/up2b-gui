@@ -8,10 +8,6 @@
 
 ## 特点
 
-> Linux系统暂时不更新，用户少，所以懒得弄，虽然我是在linux上写的。
->
-> 等有linux用户反馈的时候，我再补充linux的相关说明和文件。
-
 支持以下图床的管理：
 
 - sm.ms
@@ -40,6 +36,8 @@
 
 ## 安装
 
+### 1 源码安装
+
 将项目克隆到本地：
 
 ```shell
@@ -59,6 +57,16 @@ pip install -r requirements.txt
 截止目前(2021.02.26)，pythonnet的支持3.9的wheel并未上传到pypi，所以需要手动下载安装。
 
 [Python Extension Packages for Windows - Christoph Gohlke (uci.edu)](https://www.lfd.uci.edu/~gohlke/pythonlibs/#pythonnet)
+
+### 2 二进制文件
+
+仅限windows10系统，在release里下载最新版即可。
+
+### 3 Linux安装脚本一键安装
+
+```sh
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/thep0y/timg-gui/main/install.sh)"
+```
 
 ## 使用
 

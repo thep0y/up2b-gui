@@ -4,17 +4,19 @@
 # @Email: thepoy@aliyun.com
 # @File Name: main.py
 # @Created: 2021-02-19 16:43:08
-# @Modified: 2021-02-27 17:52:12
+# @Modified: 2021-02-28 21:08:10
 
 import os
 import sys
+import platform
 import webview
 
 from apis import Api
 
 if sys.platform == "linux":
-    # os.environ["QT_AUTO_SCREEN_SCALE_FACTOR"] = "1"  # 自动配置缩放，可能会使用不正确的缩放比例
-    os.environ["QT_SCALE_FACTOR"] = "1.5"
+    if "Ubuntu" not in platform.version():
+        # os.environ["QT_AUTO_SCREEN_SCALE_FACTOR"] = "1"  # 自动配置缩放，可能会使用不正确的缩放比例
+        os.environ["QT_SCALE_FACTOR"] = "1.5"
 
 __version__ = "0.0.4alpha"
 
@@ -63,4 +65,5 @@ if sys.platform == "win32":
     webview.start(debug=debug, localization=localization, gui="edgechromium")
     # webview.start(debug=debug, localization=localization, gui="edgehtml")
 else:
+    # Linux发行版会根据当前系统使用的GUI套件生成窗口，不需要特别指定使用qt或gtk
     webview.start(debug=debug, localization=localization)
