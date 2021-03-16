@@ -4,6 +4,8 @@ INSTALL_DIR=$HOME/Applications/timg
 
 if [ ! -d $INSTALL_DIR ]; then
     mkdir -p $INSTALL_DIR
+else
+    rm -rf $INSTALL_DIR
 fi
 
 git clone https://github.com/thep0y/timg-gui.git $INSTALL_DIR
