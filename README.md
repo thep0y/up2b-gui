@@ -62,7 +62,7 @@ pip install -r requirements.txt
 
 仅限windows10系统，在release里下载最新版即可。
 
-### 3 Linux安装脚本一键安装
+### 3 Linux安装脚本一键安装（默认使用qt）
 
 ```sh
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/thep0y/timg-gui/main/install.sh)"

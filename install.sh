@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# TODO: 选择或创建新的python环境
+
 INSTALL_DIR=$HOME/Applications/timg
 
 if [ ! -d $INSTALL_DIR ]; then
@@ -23,11 +25,9 @@ fi
 ln -s $INSTALL_DIR/timg.desktop $APP_DESKTOP
 
 if ! command -v pip3 >/dev/null 2>&1; then
-    # TODO 根据不同系统自动安装pip3 
+    # TODO: 根据不同系统自动安装pip3 
     echo "需要先安装 python3 的包管理工具 pip3 "
 else
+    # TODO: 为linux系统增加一个安装gtk和qt的选项
     pip3 install -r $INSTALL_DIR/requirements.txt
 fi
-
-
-
