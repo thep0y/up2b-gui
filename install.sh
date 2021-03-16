@@ -15,7 +15,7 @@ chmod +x $INSTALL_DIR/timg.desktop
 
 APP_DESKTOP=$HOME/.local/share/applications/timg.desktop
 
-if [ ! -d $APP_DESKTOP ]; then
+if [ -d $APP_DESKTOP ]; then
     rm $APP_DESKTOP
 fi
 ln -s $INSTALL_DIR/timg.desktop $APP_DESKTOP
