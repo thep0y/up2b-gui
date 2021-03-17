@@ -12,7 +12,7 @@ fi
 
 git clone https://github.com/thep0y/timg-gui.git $INSTALL_DIR
 
-DESKTOP="[Desktop Entry]\nName=TIMG2222\nExec=python3 ${INSTALL_DIR}/main.py\nType=Application\nStartupNotify=true\nIcon=${INSTALL_DIR}/assets/timg.png\nStartupWMClass=TIMG\nCategories=Network;\n"
+DESKTOP="[Desktop Entry]\nName=TIMG\nExec=python3 ${INSTALL_DIR}/main.py\nType=Application\nStartupNotify=true\nIcon=${INSTALL_DIR}/assets/timg.png\nStartupWMClass=TIMG\nCategories=Network;\n"
 
 echo -e $DESKTOP > $INSTALL_DIR/timg.desktop
 chmod +x $INSTALL_DIR/timg.desktop
@@ -26,7 +26,7 @@ ln -s $INSTALL_DIR/timg.desktop $APP_DESKTOP
 
 if ! command -v pip3 >/dev/null 2>&1; then
     # TODO: 根据不同系统自动安装pip3 
-    echo "需要先安装 python3 的包管理工具 pip3 "
+    echo "需要先安装 python3 的包管理工具 pip3"
 else
     # TODO: 为linux系统增加一个安装gtk和qt的选项
     pip3 install -r $INSTALL_DIR/requirements.txt

@@ -4,7 +4,7 @@
 # @Email: thepoy@aliyun.com
 # @File Name: main.py
 # @Created: 2021-02-19 16:43:08
-# @Modified: 2021-03-16 16:20:12
+# @Modified: 2021-03-16 16:43:24
 
 import os
 import sys
@@ -44,7 +44,7 @@ localization = {
 }
 
 min_width, min_height = 520, 640
-debug = True
+debug = False
 title = f"TIMG {__version__} debug" if debug else f"TIMG {__version__}"
 index = "assets/index.html"
 
