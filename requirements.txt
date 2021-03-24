@@ -1,3 +1,3 @@
 PyQtWebEngine==5.15.2;platform_system=="Linux"
 pywebview==3.4
-typora-upload-image==0.1.6
+typora-upload-image==0.1.7
