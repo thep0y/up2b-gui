@@ -1,4 +1,4 @@
-[电报群](https://t.me/pytimg)
+[电报群](https://t.me/py_up2b)
 
 # TIMG
 
@@ -41,7 +41,7 @@
 将项目克隆到本地：
 
 ```shell
-git clone https://github.com/thep0y/timg-gui.git
+git clone https://github.com/thep0y/up2b-gui.git
 ```
 
 进入项目根目录后，安装所需依赖：
@@ -65,7 +65,7 @@ pip install -r requirements.txt
 ### 3 Linux安装脚本一键安装（默认使用qt）
 
 ```sh
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/thep0y/timg-gui/main/install.sh)"
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/thep0y/up2b-gui/main/install.sh)"
 ```
 
 ## 使用
@@ -88,9 +88,6 @@ python main.py
 
 ## 附言
 
-因为依赖`timg`，所以也就可以根据[timg](https://github.com/thep0y/timg)的README在`Typora`中使用。
+因为依赖`up2b`，所以也就可以根据[up2b](https://github.com/thep0y/up2b)的README在`Typora`中使用。
 
-## 当前发现的一些问题
-
-- [x] windows上以edge chromium运行时，如果是两列图片的宽度，点击复制按钮图片布局会变成靠左的一列，linux上无此问题。暂未发现原因在哪儿。
 

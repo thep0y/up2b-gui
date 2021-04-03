@@ -2,7 +2,7 @@
 
 # TODO: 选择或创建新的python环境
 
-INSTALL_DIR=$HOME/Applications/timg
+INSTALL_DIR=$HOME/Applications/up2b
 
 if [ ! -d $INSTALL_DIR ]; then
     mkdir -p $INSTALL_DIR
@@ -10,14 +10,14 @@ else
     rm -rf $INSTALL_DIR
 fi
 
-git clone https://github.com/thep0y/timg-gui.git $INSTALL_DIR
+git clone https://github.com/thep0y/up2b-gui.git $INSTALL_DIR
 
-DESKTOP="[Desktop Entry]\nName=TIMG\nExec=python3 ${INSTALL_DIR}/main.py\nType=Application\nStartupNotify=true\nIcon=${INSTALL_DIR}/assets/timg.png\nStartupWMClass=TIMG\nCategories=Network;\n"
+DESKTOP="[Desktop Entry]\nName=up2b\nExec=python3 ${INSTALL_DIR}/main.py\nType=Application\nStartupNotify=true\nIcon=${INSTALL_DIR}/assets/up2b.png\nStartupWMClass=up2b\nCategories=Network;\n"
 
-echo -e $DESKTOP > $INSTALL_DIR/timg.desktop
-chmod +x $INSTALL_DIR/timg.desktop
+echo -e $DESKTOP > $INSTALL_DIR/up2b.desktop
+chmod +x $INSTALL_DIR/up2b.desktop
 
-APP_DESKTOP=$HOME/.local/share/applications/timg.desktop
+APP_DESKTOP=$HOME/.local/share/applications/up2b.desktop
 
 if [ -f $APP_DESKTOP ]; then
     rm $APP_DESKTOP
