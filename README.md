@@ -1,8 +1,8 @@
 [电报群](https://t.me/py_up2b)
 
-# TIMG
+# up2b
 
-基于[pywebview](https://github.com/r0x0r/pywebview)和[timg](https://github.com/thep0y/timg)写的图床管理软件。
+基于[pywebview](https://github.com/r0x0r/pywebview)和[up2b](https://github.com/thep0y/up2b)写的图床管理软件。
 
 ![demo](https://github.com/thep0y/image-bed/raw/main/md/timg-gui-demo.webp)
 
