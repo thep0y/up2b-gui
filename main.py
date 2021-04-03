@@ -4,7 +4,7 @@
 # @Email: thepoy@aliyun.com
 # @File Name: main.py
 # @Created: 2021-02-19 16:43:08
-# @Modified: 2021-03-16 16:43:24
+# @Modified: 2021-04-03 20:28:00
 
 import os
 import sys
@@ -45,7 +45,7 @@ localization = {
 
 min_width, min_height = 520, 640
 debug = False
-title = f"TIMG {__version__} debug" if debug else f"TIMG {__version__}"
+title = f"up2b {__version__} debug" if debug else f"up2b {__version__}"
 index = "assets/index.html"
 
 if sys.platform == "win32":

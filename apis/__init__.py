@@ -4,21 +4,21 @@
 # @Email: thepoy@aliyun.com
 # @File Name: __init__.py
 # @Created: 2021-02-19 16:42:55
-# @Modified: 2021-03-16 12:16:46
+# @Modified: 2021-04-03 20:29:27
 
 import os
 import sys
 import webview
 
 from typing import Dict
-from timg import IMAGE_BEDS
-from timg.timglib.timg_api import CONF_FILE, choose_image_bed
-from timg.timglib.timg_api.sm import SM
-from timg.timglib.timg_api.imgtu import Imgtu
-from timg.timglib.timg_api.gitee import Gitee
-from timg.timglib.timg_api.github import Github
-from timg.timglib.constants import IMAGE_BEDS_CODE, SM_MS, IMGTU, GITEE, GITHUB
-from timg.timglib.errors import OverSizeError, UploadFailed
+from up2b import IMAGE_BEDS
+from up2b.up2b_lib.up2b_api import CONF_FILE, choose_image_bed
+from up2b.up2b_lib.up2b_api.sm import SM
+from up2b.up2b_lib.up2b_api.imgtu import Imgtu
+from up2b.up2b_lib.up2b_api.gitee import Gitee
+from up2b.up2b_lib.up2b_api.github import Github
+from up2b.up2b_lib.constants import IMAGE_BEDS_CODE, SM_MS, IMGTU, GITEE, GITHUB
+from up2b.up2b_lib.errors import OverSizeError, UploadFailed
 from apis.utils import read_config
 from apis.errors import InvalidImageBedCode
 
