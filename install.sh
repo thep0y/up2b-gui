@@ -22,7 +22,7 @@ APP_DESKTOP=$HOME/.local/share/applications/up2b.desktop
 if [ -f $APP_DESKTOP ]; then
     rm $APP_DESKTOP
 fi
-ln -s $INSTALL_DIR/timg.desktop $APP_DESKTOP
+ln -s $INSTALL_DIR/up2b.desktop $APP_DESKTOP
 
 if ! command -v pip3 >/dev/null 2>&1; then
     # TODO: 根据不同系统自动安装pip3 
