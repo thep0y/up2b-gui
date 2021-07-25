@@ -25,12 +25,12 @@ function autoClick(el) {
 
 form.render()
 
-window.addEventListener('pywebviewready', function () {
+window.addEventListener('pywebviewready', function() {
     showImageBeds()
 })
 
 // 页面刷新前
-window.onbeforeunload = function (e) {
+window.onbeforeunload = function(e) {
     let li = document.getElementsByClassName("layui-this")[0]
     let index = 0
     while (li) {
@@ -88,7 +88,7 @@ var gitHTML = `<div class="layui-form-item">
 
 
 function showImageBeds() {
-    pywebview.api.show_image_beds().then(function (response) {
+    pywebview.api.show_image_beds().then(function(response) {
         let chooseBed = document.getElementById("image-bed")
         let html = ""
         let beds = response.beds
@@ -112,7 +112,9 @@ function showImageBeds() {
                     if (i == response.selected) {
                         bedsListHTML += '<button type="button" class="layui-btn">' + bedList[i] + '</button>'
                     } else {
-                        bedsListHTML += '<button type="button" class="layui-btn layui-btn-primary">' + bedList[i] + '</button>'
+                        if (Object.keys(response.auth_data[i]).length > 0) {
+                            bedsListHTML += '<button type="button" class="layui-btn layui-btn-primary">' + bedList[i] + '</button>'
+                        }
                     }
                 }
             }
@@ -162,43 +164,43 @@ function renderAutomaticCompressionSwitch() {
 }
 
 form.verify({
-    "image-bed": function (value, item) {
+    "image-bed": function(value, item) {
         if (!value) {
             return "请选择图床"
         }
     },
-    username: function (value, item) {
+    username: function(value, item) {
         if (!value) {
             return "用户名不能为空"
         }
     },
-    password: function (value, item) {
+    password: function(value, item) {
         if (!value) {
             return "密码不能为空"
         }
     },
-    "access-token": function (value, item) {
+    "access-token": function(value, item) {
         if (!value) {
             return "私人令牌不能为空"
         }
     },
-    repository: function (value, item) {
+    repository: function(value, item) {
         if (!value) {
             return "仓库不能为空"
         }
     },
-    path: function (value, item) {
+    path: function(value, item) {
         if (!value) {
             return "目录不能为空"
         }
     },
 })
 
-form.on("submit(init-image-bed)", function (data) {
+form.on("submit(init-image-bed)", function(data) {
     let loading = layer.load(1, {
         shade: [0.8, "#FFF"]
     })
-    pywebview.api.init_image_bed(form.val("image-bed-form")).then(function (response) {
+    pywebview.api.init_image_bed(form.val("image-bed-form")).then(function(response) {
         if (response.success) {
             layer.close(loading)
             let confBlock = document.getElementById("image-bed-conf-block")
@@ -281,11 +283,11 @@ function copyImageURL(element) {
     document.body.removeChild(input)
 }
 
-$("#toggle-automatic-compression").on("click", ".layui-form-switch", function (event) {
+$("#toggle-automatic-compression").on("click", ".layui-form-switch", function(event) {
     let ac = event.currentTarget.previousElementSibling.checked
 })
 
-form.on("switch(aac)", function (data) {
+form.on("switch(aac)", function(data) {
     pywebview.api.toggle_automatic_compression(data.elem.checked).then((response) => {
         console.log(response)
     })
@@ -314,7 +316,7 @@ form.on("switch(aac)", function (data) {
 //     // }
 // });
 
-form.on("select", function (data) {
+form.on("select", function(data) {
     toggleImageBedConfHTML(data.value)
 })
 
@@ -412,12 +414,12 @@ function viewImage(element) {
             if (img.complete) {
                 width = img.width
                 height = img.height
-                img.onload = function () {};
+                img.onload = function() { };
             } else {
-                img.onload = function () {
+                img.onload = function() {
                     width = img.width
                     height = img.height
-                    img.onload = function () {};
+                    img.onload = function() { };
                 }
             }
             break
@@ -426,7 +428,7 @@ function viewImage(element) {
     pywebview.api.view_image_in_new_windows(url, Number(width), Number(height))
 }
 
-$("#all-images").on("click", ".delete-image", function (event) {
+$("#all-images").on("click", ".delete-image", function(event) {
     let loading = layer.load(1, {
         shade: [0.8, "#FFF"]
     })
