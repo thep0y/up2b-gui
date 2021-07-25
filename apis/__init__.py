@@ -4,7 +4,7 @@
 # @Email: thepoy@aliyun.com
 # @File Name: __init__.py
 # @Created: 2021-02-19 16:42:55
-# @Modified: 2021-04-03 20:29:27
+# @Modified: 2021-07-25 23:21:44
 
 import os
 import sys
@@ -33,13 +33,13 @@ class Api:
     def show_image_beds(self):
         conf = read_config(CONF_FILE)
         selected = conf.get("image_bed", None)
-        if type(selected) == int and selected >= 0:
+        if type(selected) == int and selected and selected >= 0:
             self.image_bed = IMAGE_BEDS[selected]()
             self.image_bed.auto_compress = self.auto_compress
         response = {
             "selected": selected,
             "beds": IMAGE_BEDS_CODE,
-            "auth_data": conf.get("auth_data", None)
+            "auth_data": conf.get("auth_data", None),
         }
         return response
 
@@ -53,11 +53,13 @@ class Api:
         elif img_bed_code == IMGTU:
             self.image_bed.login(info["username"], info["password"])
         elif img_bed_code == GITEE:
-            self.image_bed.login(info["access-token"], info["username"],
-                                 info["repository"], info["path"])
+            self.image_bed.login(
+                info["access-token"], info["username"], info["repository"], info["path"]
+            )
         elif img_bed_code == GITHUB:
-            self.image_bed.login(info["access-token"], info["username"],
-                                 info["repository"], info["path"])
+            self.image_bed.login(
+                info["access-token"], info["username"], info["repository"], info["path"]
+            )
         else:
             raise InvalidImageBedCode("未知的图床代码")
         # 如果程序有异常，此处会退出，没有退出就是正常登录
@@ -71,19 +73,20 @@ class Api:
         return response
 
     def upload_images(self):
-        file_types = ('选择要上传的图片 (*.jpg;*.gif;*.png;*.jpeg)', )
+        file_types = ('选择要上传的图片 (*.jpg;*.gif;*.png;*.jpeg)',)
         image_paths = webview.windows[0].create_file_dialog(
-            webview.OPEN_DIALOG, allow_multiple=True, file_types=file_types)
+            webview.OPEN_DIALOG, allow_multiple=True, file_types=file_types
+        )
         if image_paths and len(image_paths) > 10:
             response = {
                 "success": False,
-                "error": "一次最多只能上传 10 张图片，你上传了 %d 张" % len(image_paths)
+                "error": "一次最多只能上传 10 张图片，你上传了 %d 张" % len(image_paths),
             }
             return response
         urls = []
         if image_paths:
             try:
-                urls = self.image_bed.upload_images(image_paths)
+                urls = self.image_bed.upload_images(image_paths)  # type: ignore
             except OverSizeError as e:
                 return {"success": False, "error": f"图片超限了 - {e}"}
             except UploadFailed as e:
@@ -97,10 +100,7 @@ class Api:
         self.auto_compress = ac
         if self.image_bed:
             self.image_bed.auto_compress = self.auto_compress
-        response = {
-            "success": True,
-            "automatic_compression": self.auto_compress
-        }
+        response = {"success": True, "automatic_compression": self.auto_compress}
         return response
 
     def automatic_compression_status(self):
@@ -111,10 +111,7 @@ class Api:
             images = self.image_bed.get_all_images()
         else:
             images = []
-        response = {
-            "success": True,
-            "images": images,
-        }
+        response = {"success": True, "images": images}
         return response
 
     def view_image_in_new_windows(self, url: str, width: int, height: int):
@@ -128,10 +125,13 @@ class Api:
         )
 
     def delete_image(self, *args):
-        result = self.image_bed.delete_image(*args)
+        result = self.image_bed.delete_image(*args)  # type: ignore
 
-        if isinstance(self.image_bed, SM) or isinstance(
-                self.image_bed, Gitee) or isinstance(self.image_bed, Github):
+        if (
+            isinstance(self.image_bed, SM)
+            or isinstance(self.image_bed, Gitee)
+            or isinstance(self.image_bed, Github)
+        ):
             return {"success": result}
         elif isinstance(self.image_bed, Imgtu):
             status_code = result["status_code"]
@@ -139,10 +139,7 @@ class Api:
             if success:
                 return {"success": success}
             error = result["error"]["message"]
-            response = {
-                "success": success,
-                "error": error,
-            }
+            response = {"success": success, "error": error}
             return response
         else:
             return {"success": False, "error": "未知的图床"}
