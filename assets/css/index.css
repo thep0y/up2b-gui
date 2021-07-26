@@ -14,13 +14,19 @@ body {
     /*font-size: 22pt;*/
 }
 
+#title-bar {
+    position: fixed;
+    z-index: 99;
+    right: 0;
+    width: 100%;
+    top: 0;
+}
+
 #status {
-    position: absolute;
-    z-index: 1;
-    right: 10px;
-    top: 6px;
     height: 30px;
     line-height: 30px;
+    float: right;
+    margin: 5px;
 }
 
 #status:hover {
@@ -31,6 +37,12 @@ body {
     min-height: 100%;
     margin-top: 0;
     margin-bottom: 0;
+}
+
+.layui-tab-title {
+    position: fixed;
+    z-index: 99;
+    top: 0;
 }
 
 .layui-tab-title li {
