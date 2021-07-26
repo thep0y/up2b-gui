@@ -4,7 +4,7 @@
 
 基于[pywebview](https://github.com/r0x0r/pywebview)和[up2b](https://github.com/thep0y/up2b)写的图床管理软件。
 
-![demo](https://github.com/thep0y/image-bed/raw/main/md/timg-gui-demo.webp)
+![示意动图](https://cdn.jsdelivr.net/gh/thep0y/image-bed/md/1627304330305535.png)
 
 ## 特点
 
@@ -89,5 +89,4 @@ python main.py
 ## 附言
 
 因为依赖`up2b`，所以也就可以根据[up2b](https://github.com/thep0y/up2b)的README在`Typora`中使用。
-
 
