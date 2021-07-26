@@ -4,7 +4,7 @@
 # @Email: thepoy@aliyun.com
 # @File Name: main.py
 # @Created: 2021-02-19 16:43:08
-# @Modified: 2021-07-26 12:42:25
+# @Modified: 2021-07-26 16:43:40
 
 import os
 import sys
@@ -44,7 +44,7 @@ localization = {
 }
 
 min_width, min_height = 520, 640
-debug = False
+debug = True
 title = f"up2b {__version__} debug" if debug else f"up2b {__version__}"
 index = "assets/index.html"
 
