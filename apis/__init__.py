@@ -4,15 +4,15 @@
 # @Email: thepoy@aliyun.com
 # @File Name: __init__.py
 # @Created: 2021-02-19 16:42:55
-# @Modified: 2021-07-25 23:21:44
+# @Modified: 2021-07-26 12:01:01
 
 import os
 import sys
 import webview
 
-from typing import Dict
+from typing import Dict, Optional
 from up2b import IMAGE_BEDS
-from up2b.up2b_lib.up2b_api import CONF_FILE, choose_image_bed
+from up2b.up2b_lib.up2b_api import CONF_FILE, choose_image_bed, IS_WINDOWS
 from up2b.up2b_lib.up2b_api.sm import SM
 from up2b.up2b_lib.up2b_api.imgtu import Imgtu
 from up2b.up2b_lib.up2b_api.gitee import Gitee
@@ -22,6 +22,9 @@ from up2b.up2b_lib.errors import OverSizeError, UploadFailed
 from apis.utils import read_config
 from apis.errors import InvalidImageBedCode
 
+if IS_WINDOWS:
+    import ctypes
+
 
 class Api:
     def __init__(self):
@@ -29,6 +32,11 @@ class Api:
         self.image_bed = None
         self.auto_compress: bool = False
         # self.conf: Dict[str, str] = read_config(CONF_FILE)
+        self.height = self.width = 0
+        if IS_WINDOWS:
+            user32 = ctypes.windll.user32
+            self.width: int = user32.GetSystemMetrics(0)
+            self.height: int = user32.GetSystemMetrics(1) - 30
 
     def show_image_beds(self):
         conf = read_config(CONF_FILE)
@@ -40,6 +48,7 @@ class Api:
             "selected": selected,
             "beds": IMAGE_BEDS_CODE,
             "auth_data": conf.get("auth_data", None),
+            "screensize": {"height": self.height, "width": self.width},
         }
         return response
 
@@ -115,13 +124,20 @@ class Api:
         return response
 
     def view_image_in_new_windows(self, url: str, width: int, height: int):
-        is_windows = sys.platform == "win32"
         image_name = os.path.basename(url)
+        # TODO: 根据当前屏幕尺寸显示大图
+        if IS_WINDOWS:
+            width = self.width if width + 20 > self.width else width + 38
+            height = self.height if height + 20 > self.height else height + 72
+        else:
+            width = width + 20
+            height = height + 20
         webview.create_window(
             image_name,
             html="<img src='%s'></img>" % url,
-            width=width + 30 if is_windows else width + 20,
-            height=height + 72 if is_windows else height + 20,
+            width=width,
+            height=height,
+            resizable=False,
         )
 
     def delete_image(self, *args):
