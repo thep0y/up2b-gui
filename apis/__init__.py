@@ -4,13 +4,12 @@
 # @Email: thepoy@aliyun.com
 # @File Name: __init__.py
 # @Created: 2021-02-19 16:42:55
-# @Modified: 2021-07-26 12:01:01
+# @Modified: 2021-07-26 17:01:20
 
 import os
-import sys
 import webview
 
-from typing import Dict, Optional
+from typing import Dict, Union
 from up2b import IMAGE_BEDS
 from up2b.up2b_lib.up2b_api import CONF_FILE, choose_image_bed, IS_WINDOWS
 from up2b.up2b_lib.up2b_api.sm import SM
@@ -34,16 +33,17 @@ class Api:
         # self.conf: Dict[str, str] = read_config(CONF_FILE)
         self.height = self.width = 0
         if IS_WINDOWS:
-            user32 = ctypes.windll.user32
+            user32 = ctypes.windll.user32  # type: ignore
             self.width: int = user32.GetSystemMetrics(0)
             self.height: int = user32.GetSystemMetrics(1) - 30
 
     def show_image_beds(self):
-        conf = read_config(CONF_FILE)
+        conf: Dict[str, Union[str, int]] = read_config(CONF_FILE)
         selected = conf.get("image_bed", None)
-        if type(selected) == int and selected and selected >= 0:
-            self.image_bed = IMAGE_BEDS[selected]()
-            self.image_bed.auto_compress = self.auto_compress
+        if type(selected) == int:
+            if selected >= 0:  # type: ignore
+                self.image_bed = IMAGE_BEDS[selected]()  # type: ignore
+                self.image_bed.auto_compress = self.auto_compress
         response = {
             "selected": selected,
             "beds": IMAGE_BEDS_CODE,
