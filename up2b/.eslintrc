@@ -1,14 +1,20 @@
 {
-    "parser": "@typescript-eslint/parser",
+    // "parser": "@typescript-eslint/parser",
+    "parser": "vue-eslint-parser",
     "parserOptions": {
+        "parser": "@typescript-eslint/parser",
         "project": [
             "tsconfig.json"
+        ],
+        "extraFileExtensions": [
+            "vue"
         ]
     },
     "extends": [
-        "eslint:recommended",
-        "plugin:@typescript-eslint/recommended",
-        "plugin:@typescript-eslint/recommended-requiring-type-checking"
+        "plugin:vue/vue3-recommended"
+        // "eslint:recommended",
+        // "plugin:@typescript-eslint/recommended",
+        // "plugin:@typescript-eslint/recommended-requiring-type-checking"
     ],
     "plugins": [
         "eslint-plugin",
@@ -49,6 +55,10 @@
             }
         ],
         "@typescript-eslint/no-non-null-assertion": "off",
-        "no-trailing-spaces": "error"
+        "no-trailing-spaces": "error",
+        // vue
+        "vue/singleline-html-element-content-newline": "off",
+        "vue/max-attributes-per-line": "off",
+        "vue/html-indent": "off"
     }
 }

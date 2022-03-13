@@ -4,11 +4,11 @@
   "version": "0.0.1",
   "scripts": {
     "dev": "vite",
-    "build": "vue-tsc --noEmit && vite build",
+    "build": "vue-tsc --noEmit && vite build --emptyOutDir",
     "preview": "vite preview"
   },
   "dependencies": {
-    "element-plus": "^2.0.5",
+    "element-plus": "^2.1.0",
     "vue": "^3.2.31",
     "vue-router": "^4.0.14"
   },
@@ -21,6 +21,7 @@
     "eslint": "",
     "eslint-plugin": "",
     "eslint-plugin-eslint-plugin": "",
+    "eslint-plugin-vue": "^8.5.0",
     "sass": "",
     "typescript": "^4.6.2",
     "unplugin-auto-import": "^0.6.4",
