@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# @Author: thepoy
-# @Email: thepoy@aliyun.com
+# @Author:    thepoy
+# @Email:     thepoy@163.com
 # @File Name: main.py
-# @Created: 2021-02-19 16:43:08
-# @Modified: 2021-07-26 16:43:40
+# @Created:   2021-02-19 16:43:08
+# @Modified:  2022-03-11 13:32:57
 
 import os
 import sys
@@ -18,12 +18,12 @@ if sys.platform == "linux":
         # os.environ["QT_AUTO_SCREEN_SCALE_FACTOR"] = "1"  # 自动配置缩放，可能会使用不正确的缩放比例
         os.environ["QT_SCALE_FACTOR"] = "1.5"
 
-__version__ = "0.0.7 alpha"
+__version__ = "0.0.8 alpha"
 
 api = Api()
 
 localization = {
-    'global.quitConfirmation': u'你真的要退出吗？',
+    "global.quitConfirmation": "你真的要退出吗？",
     # 'global.ok': u'确认',
     # 'global.quit': u'退出',
     # 'global.cancel': u'取消',
@@ -62,7 +62,9 @@ webview.create_window(
 )
 
 if sys.platform == "win32":
-    webview.start(debug=debug, localization=localization, gui="edgechromium")
+    webview.start(
+        http_server=True, debug=debug, localization=localization, gui="edgechromium"
+    )
     # webview.start(debug=debug, localization=localization, gui="edgehtml")
 else:
     # Linux发行版会根据当前系统使用的GUI套件生成窗口，不需要特别指定使用qt或gtk

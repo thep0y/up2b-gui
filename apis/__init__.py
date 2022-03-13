@@ -4,19 +4,26 @@
 # @Email: thepoy@aliyun.com
 # @File Name: __init__.py
 # @Created: 2021-02-19 16:42:55
-# @Modified: 2021-07-26 17:01:20
+# @Modified:  2022-03-11 12:53:00
 
 import os
 import webview
 
 from typing import Dict, Union
 from up2b import IMAGE_BEDS
-from up2b.up2b_lib.up2b_api import CONF_FILE, choose_image_bed, IS_WINDOWS
+from up2b.up2b_lib.up2b_api import CONF_FILE, choose_image_bed
 from up2b.up2b_lib.up2b_api.sm import SM
 from up2b.up2b_lib.up2b_api.imgtu import Imgtu
 from up2b.up2b_lib.up2b_api.gitee import Gitee
 from up2b.up2b_lib.up2b_api.github import Github
-from up2b.up2b_lib.constants import IMAGE_BEDS_CODE, SM_MS, IMGTU, GITEE, GITHUB
+from up2b.up2b_lib.constants import (
+    IMAGE_BEDS_CODE,
+    SM_MS,
+    IMGTU,
+    GITEE,
+    GITHUB,
+    IS_WINDOWS,
+)
 from up2b.up2b_lib.errors import OverSizeError, UploadFailed
 from apis.utils import read_config
 from apis.errors import InvalidImageBedCode
@@ -82,7 +89,7 @@ class Api:
         return response
 
     def upload_images(self):
-        file_types = ('选择要上传的图片 (*.jpg;*.gif;*.png;*.jpeg)',)
+        file_types = ("选择要上传的图片 (*.jpg;*.gif;*.png;*.jpeg)",)
         image_paths = webview.windows[0].create_file_dialog(
             webview.OPEN_DIALOG, allow_multiple=True, file_types=file_types
         )
