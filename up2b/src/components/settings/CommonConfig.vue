@@ -39,7 +39,6 @@ const submitForm = (formEl: FormInstance | undefined) => {
     if (!formEl) return
     formEl.validate((valid, fields) => {
         if (valid) {
-            console.log(commonForm.value.username, commonForm.value.password)
             console.log('submit!')
         } else {
             console.log('error submit!', fields)

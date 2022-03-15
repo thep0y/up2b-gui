@@ -16,12 +16,12 @@
             </el-input>
         </el-form-item>
         <el-form-item prop="repo">
-            <el-input v-model="gitForm.repo" placeholder="请输入要使用的仓库" show-password>
+            <el-input v-model="gitForm.repo" placeholder="请输入要使用的仓库">
                 <template #prepend>仓&emsp;&emsp;库</template>
             </el-input>
         </el-form-item>
         <el-form-item prop="folder">
-            <el-input v-model="gitForm.folder" placeholder="请输入要保存的目录" show-password>
+            <el-input v-model="gitForm.folder" placeholder="请输入要保存的目录">
                 <template #prepend>目&emsp;&emsp;录</template>
             </el-input>
         </el-form-item>
