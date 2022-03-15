@@ -59,6 +59,8 @@
         // vue
         "vue/singleline-html-element-content-newline": "off",
         "vue/max-attributes-per-line": "off",
+        "vue/no-mutating-props": "off",
+        "vue/require-prop-types": "off",
         "vue/html-indent": "off"
     }
 }

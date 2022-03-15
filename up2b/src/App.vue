@@ -40,11 +40,11 @@
 import {
   Upload,
   Menu as IconMenu,
-  Setting,
+  Setting
 } from '@element-plus/icons-vue'
-import Uploader from "./views/Uploader.vue"
+import Uploader from './views/Uploader.vue'
 import ImageListVue from './views/ImageList.vue';
-import Settings from "./views/Settings.vue"
+import Settings from './views/Settings.vue'
 
 </script>
 
