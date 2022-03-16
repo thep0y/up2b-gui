@@ -36,11 +36,17 @@
     <el-switch
       v-model="automaticCompression"
       class="mt-2"
-      style="margin-left: 24px"
       inline-prompt
       :active-icon="Check"
       :inactive-icon="Close"
+      @change="toggleAutomaticCompression"
     />
+  </div>
+  <div id="select-image-bed">
+    <fieldset>
+      <legend>切换图床</legend>
+      <div id="configed-beds-list" />
+    </fieldset>
   </div>
 </template>
 
@@ -51,6 +57,7 @@ import { showImageBeds } from '../apis'
 import { ImageBedsResponse } from '../apis/interfaces'
 import CommonConfig from '../components/settings/CommonConfig.vue'
 import GitConfig from '../components/settings/GitConfig.vue'
+import { ElMessage } from 'element-plus'
 
 interface Option {
   value: number,
@@ -72,6 +79,15 @@ function update(resp: ImageBedsResponse) {
 }
 
 onBeforeMount(() => window.addEventListener('pywebviewready', () => { showImageBeds(update) }))
+
+const toggleAutomaticCompression = function (val: any): any {
+  if (val) {
+    ElMessage({
+      message: '图片自动压缩功能尚不完善，如遇异常请关闭此功能',
+      type: 'warning'
+    })
+  }
+}
 
 </script>
 
@@ -102,7 +118,12 @@ onBeforeMount(() => window.addEventListener('pywebviewready', () => { showImageB
   border-left: 5px solid var(--el-color-primary);
   margin: 20px 0;
   font-size: 0.9rem;
+  font-weight: 300;
   text-align: left;
+}
+
+#automatic-compression {
+  height: 32px;
 }
 
 #automatic-compression span.label {
@@ -112,9 +133,33 @@ onBeforeMount(() => window.addEventListener('pywebviewready', () => { showImageB
   vertical-align: middle;
   font-size: 18px;
   float: left;
+  margin-left: 10px;
+  font-weight: 300;
 }
 
 #automatic-compression .el-switch {
   float: left;
+  margin-left: 8px;
+}
+
+#select-image-bed {
+  margin-top: 30px;
+}
+
+#select-image-bed fieldset {
+  min-height: 50px;
+  margin-bottom: 10px;
+  padding: 0;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #e6e6e6;
+  text-align: left;
+}
+
+#select-image-bed legend {
+  margin-left: 20px;
+  padding: 0 10px;
+  font-size: 18px;
+  font-weight: 300;
 }
 </style>

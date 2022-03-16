@@ -1,6 +1,6 @@
 <template>
     <el-upload
-        class="upload-demo"
+        class="upload"
         drag
         action="https://jsonplaceholder.typicode.com/posts/"
         multiple
@@ -16,6 +16,7 @@
             <div class="el-upload__tip">一次最多上传10张图片</div>
         </template>
     </el-upload>
+    <div style="height: 10px;" />
     <el-divider content-position="left">已上传的图片</el-divider>
 </template>
 
@@ -25,8 +26,22 @@ import { UploadFilled } from '@element-plus/icons-vue'
 </script>
 
 <style>
-.el-divider__text {
+.upload .el-divider__text {
     color: var(--el-text-color-regular);
-    font-size: 18px;
+    font-size: 20px;
+    font-weight: 300;
+}
+
+.upload {
+    font-weight: 400;
+    width: 100%;
+}
+
+.upload .el-upload {
+    display: block;
+}
+
+.upload .el-upload-dragger {
+    width: 100%;
 }
 </style>
