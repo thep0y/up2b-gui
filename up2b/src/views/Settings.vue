@@ -50,7 +50,16 @@
   <div id="select-image-bed">
     <fieldset>
       <legend>切换图床</legend>
-      <div id="configed-beds-list" />
+      <div id="configed-beds-list">
+        <el-tag
+          v-for="tag in configBedTags"
+          :key="tag.index"
+          class="mx-1"
+          type="success"
+          :effect="tag.effect"
+          @click="selectImageBed(tag.index)"
+        >{{ tag.name }}</el-tag>
+      </div>
     </fieldset>
   </div>
 </template>
@@ -63,14 +72,22 @@ import { ImageBedsResponse } from '../apis/interfaces'
 import CommonConfig from '../components/settings/CommonConfig.vue'
 import GitConfig from '../components/settings/GitConfig.vue'
 import { ElMessage } from 'element-plus'
+import { ImageCodes } from '../apis/consts'
 
 interface Option {
   value: number,
   label: string
 }
 
+interface Tag {
+  index: number,
+  name: string,
+  effect: import('element-plus/es/utils').BuildPropType<StringConstructor, 'plain' | 'light' | 'dark', unknown>
+}
+
 const value = ref(-1)
 const options = ref(([] as Option[]))
+const configBedTags = ref(([] as Tag[]))
 const automaticCompression = ref(false)
 
 function update(resp: ImageBedsResponse) {
@@ -81,6 +98,15 @@ function update(resp: ImageBedsResponse) {
       label: key
     })
   }
+  resp.auth_data.forEach((v, i) => {
+    if (Object.keys(v).length > 0) {
+      configBedTags.value.push({
+        index: i,
+        name: ImageCodes[i],
+        effect: i === value.value ? 'dark' : 'plain'
+      })
+    }
+  })
 }
 
 onBeforeMount(() => window.addEventListener('pywebviewready', () => { showImageBeds(update) }))
@@ -92,6 +118,26 @@ const toggleAutomaticCompression = function (val: any): any {
       type: 'warning'
     })
   }
+}
+
+const selectImageBed = (idx: number) => {
+  if (idx === value.value) {
+    return
+  }
+
+  console.log(idx, value.value, configBedTags.value)
+
+  configBedTags.value.forEach((v, i) => {
+    if (value.value === v.index) {
+      configBedTags.value[i].effect = 'plain'
+    }
+    if (idx === v.index) {
+      configBedTags.value[i].effect = 'dark'
+      value.value = v.index
+    }
+  })
+
+  console.log(idx, value.value, configBedTags.value)
 }
 
 </script>
@@ -170,5 +216,18 @@ const toggleAutomaticCompression = function (val: any): any {
   padding: 0 10px;
   font-size: 18px;
   font-weight: 300;
+}
+
+#configed-beds-list {
+  padding: 10px;
+}
+
+#configed-beds-list .el-tag {
+  margin: 10px;
+  height: 32px;
+}
+
+#configed-beds-list .el-tag.el-tag--plain {
+  cursor: pointer;
 }
 </style>
