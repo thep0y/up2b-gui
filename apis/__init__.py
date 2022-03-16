@@ -26,7 +26,6 @@ from up2b.up2b_lib.constants import (
 )
 from up2b.up2b_lib.errors import OverSizeError, UploadFailed
 from apis.utils import read_config
-from apis.errors import InvalidImageBedCode
 
 if IS_WINDOWS:
     import ctypes
@@ -59,28 +58,33 @@ class Api:
         }
         return response
 
-    def init_image_bed(self, info: Dict[str, str]):
+    def init_image_bed(self, info: Dict[str, Union[str, int]]):
         # TODO: 如果有异常，返回false和错误详情
-        img_bed_code = int(info["image-bed"])
+        img_bed_code = info["image-bed"]
+
+        assert isinstance(img_bed_code, int)
+
         choose_image_bed(img_bed_code)
         self.image_bed = IMAGE_BEDS[img_bed_code]()
+
+        # TODO: 判断条件需要修改为根据图床类型执行
         if img_bed_code == SM_MS:
-            self.image_bed.login(info["username"], info["password"])
+            if not self.image_bed.login(info["username"], info["password"]):
+                return {"success": False, "error": "用户名或密码错误"}
         elif img_bed_code == IMGTU:
-            self.image_bed.login(info["username"], info["password"])
+            if not self.image_bed.login(info["username"], info["password"]):
+                return {"success": False, "error": "用户名或密码错误"}
         elif img_bed_code == GITEE:
             self.image_bed.login(
-                info["access-token"], info["username"], info["repository"], info["path"]
+                info["token"], info["username"], info["repo"], info["folder"]
             )
         elif img_bed_code == GITHUB:
             self.image_bed.login(
-                info["access-token"], info["username"], info["repository"], info["path"]
+                info["token"], info["username"], info["repo"], info["folder"]
             )
         else:
-            raise InvalidImageBedCode("未知的图床代码")
-        # 如果程序有异常，此处会退出，没有退出就是正常登录
-        response = {"success": True}
-        return response
+            return {"success": False, "error": "未知的图床代码: %d" % img_bed_code}
+        return {"success": True, "error": ""}
 
     def choose_image_bed(self, img_bed_code: int):
         # TODO: 选择图床后，应该将图床对应的认证信息保存到webview窗口，方便直接用窗口上传图片到网站

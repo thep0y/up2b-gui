@@ -19,6 +19,7 @@ declare module 'vue' {
     ElTooltip: typeof import('element-plus/es')['ElTooltip']
     ElUpload: typeof import('element-plus/es')['ElUpload']
     GitConfig: typeof import('./components/settings/GitConfig.vue')['default']
+    Loading: typeof import('element-plus/es')['ElLoadingDirective']
   }
 }
 

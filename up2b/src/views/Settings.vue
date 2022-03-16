@@ -16,16 +16,16 @@
   <el-divider content-position="center">配置</el-divider>
   <!-- TODO: 应该添加图床类型，用来判断应该用什么组件，只用 v-if 太麻烦 -->
   <div v-if="value === 0" id="settings-config">
-    <common-config />
+    <common-config :image-code="value" />
   </div>
   <div v-if="value === 1" id="settings-config">
-    <common-config />
+    <common-config :image-code="value" />
   </div>
   <div v-if="value === 2" id="settings-config">
-    <git-config />
+    <git-config :image-code="value" />
   </div>
   <div v-if="value === 3" id="settings-config">
-    <git-config />
+    <git-config :image-code="value" />
   </div>
   <div class="tip custom-block">
     <ul>

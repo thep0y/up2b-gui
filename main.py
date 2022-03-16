@@ -10,6 +10,7 @@ import os
 import sys
 import platform
 import webview
+from up2b.up2b_lib.utils import logger
 
 from apis import Api
 
@@ -61,11 +62,12 @@ webview.create_window(
     text_select=False,
 )
 
-if sys.platform == "win32":
-    webview.start(
-        http_server=True, debug=debug, localization=localization, gui="edgechromium"
-    )
-    # webview.start(debug=debug, localization=localization, gui="edgehtml")
-else:
-    # Linux发行版会根据当前系统使用的GUI套件生成窗口，不需要特别指定使用qt或gtk
-    webview.start(debug=debug, localization=localization)
+with logger:
+    if sys.platform == "win32":
+        webview.start(
+            http_server=True, debug=debug, localization=localization, gui="edgechromium"
+        )
+        # webview.start(debug=debug, localization=localization, gui="edgehtml")
+    else:
+        # Linux发行版会根据当前系统使用的GUI套件生成窗口，不需要特别指定使用qt或gtk
+        webview.start(debug=debug, localization=localization)

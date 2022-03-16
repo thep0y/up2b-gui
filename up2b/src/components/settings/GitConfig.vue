@@ -1,5 +1,11 @@
 <template>
-    <el-form ref="gitFormRef" :model="gitForm" status-icon :rules="rules">
+    <el-form
+        ref="gitFormRef"
+        v-loading.fullscreen.lock="loading"
+        :model="gitForm"
+        status-icon
+        :rules="rules"
+    >
         <el-form-item prop="token">
             <el-input
                 v-model="gitForm.token"
@@ -34,8 +40,12 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import type { FormInstance } from 'element-plus'
-import { GitConfig as GitForm } from '../../apis/interfaces'
+import { FormInstance, ElMessage } from 'element-plus'
+import { GitConfig as GitForm, InitGitImageBedParams } from '../../apis/interfaces'
+import { initImageBeds } from '../../apis'
+import { ImageCodes } from '../../apis/consts'
+
+const props = defineProps({ imageCode: { type: Number, required: true } })
 
 const gitFormRef = ref<FormInstance>()
 const gitForm = ref(({} as GitForm))
@@ -47,11 +57,32 @@ const rules = ref({
     folder: [{ required: true, message: '请输入目录名', trigger: 'blur' }]
 })
 
+let loading = ref(false)
+const openLoading = () => {
+    loading.value = true
+}
 const submitForm = (formEl: FormInstance | undefined) => {
     if (!formEl) return
     formEl.validate((valid, fields) => {
         if (valid) {
-            console.log('submit!')
+            openLoading()
+
+            const data: InitGitImageBedParams = {
+                'image-bed': props.imageCode,
+                token: gitForm.value.token,
+                username: gitForm.value.username,
+                repo: gitForm.value.repo,
+                folder: gitForm.value.folder
+            }
+            initImageBeds(data, function (r) {
+                loading.value = false
+                if (r.success) {
+                    ElMessage({
+                        message: `已保存 ${ImageCodes[props.imageCode]} 配置信息`,
+                        type: 'success'
+                    })
+                }
+            })
         } else {
             console.log('error submit!', fields)
             return false
