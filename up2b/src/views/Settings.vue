@@ -125,10 +125,10 @@ const selectImageBed = (idx: number) => {
     return
   }
 
-  console.log(idx, value.value, configBedTags.value)
+  const cur = value.value
 
   configBedTags.value.forEach((v, i) => {
-    if (value.value === v.index) {
+    if (cur === v.index) {
       configBedTags.value[i].effect = 'plain'
     }
     if (idx === v.index) {
@@ -136,8 +136,6 @@ const selectImageBed = (idx: number) => {
       value.value = v.index
     }
   })
-
-  console.log(idx, value.value, configBedTags.value)
 }
 
 </script>
