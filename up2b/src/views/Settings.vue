@@ -27,7 +27,12 @@
   <div v-if="value === 3" id="settings-config">
     <git-config />
   </div>
-  <div class="tip custom-block">重复修改某图床的配置会覆盖之前的配置信息</div>
+  <div class="tip custom-block">
+    <ul>
+      <li>所有配置都将保存到本地文件</li>
+      <li>重复修改某图床的配置会覆盖之前的配置信息</li>
+    </ul>
+  </div>
   <el-divider content-position="center" />
   <div id="automatic-compression">
     <el-tooltip class="box-item" effect="dark" content="试验功能，可能不稳定" placement="top-start">
@@ -112,7 +117,6 @@ const toggleAutomaticCompression = function (val: any): any {
 }
 
 .custom-block {
-  padding: 8px 16px;
   background-color: var(--block-bg-color);
   border-radius: 4px;
   border-left: 5px solid var(--el-color-primary);
@@ -120,6 +124,11 @@ const toggleAutomaticCompression = function (val: any): any {
   font-size: 0.9rem;
   font-weight: 300;
   text-align: left;
+}
+
+.custom-block ul {
+  padding: 6px 0;
+  padding-left: 24px;
 }
 
 #automatic-compression {
