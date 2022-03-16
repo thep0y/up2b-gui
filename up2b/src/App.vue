@@ -50,11 +50,15 @@ import Settings from './views/Settings.vue'
 
 <style type="text/css">
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: -apple-system, "PingFang SC", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+  height: 100%;
+}
+#app .el-tabs {
+  height: calc(100% - 3px);
 }
 .element-plus-logo {
   width: 50%;

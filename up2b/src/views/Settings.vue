@@ -225,6 +225,10 @@ const selectImageBed = (idx: number) => {
   height: 32px;
 }
 
+#configed-beds-list .el-tag .el-tag__content {
+  font-weight: 300;
+}
+
 #configed-beds-list .el-tag.el-tag--plain {
   cursor: pointer;
 }
