@@ -4,13 +4,13 @@
 # @Email:     thepoy@163.com
 # @File Name: main.py
 # @Created:   2021-02-19 16:43:08
-# @Modified:  2022-03-16 22:30:55
+# @Modified:  2022-03-17 08:25:10
 
 import os
 import sys
 import platform
 import webview
-from up2b.up2b_lib.utils import logger
+from up2b.up2b_lib.utils import logger, is_debug
 
 from apis import Api
 
@@ -45,7 +45,7 @@ localization = {
 }
 
 min_width, min_height = 520, 777
-debug = True
+debug = is_debug()
 title = f"up2b {__version__} debug" if debug else f"up2b {__version__}"
 index = "assets/index.html"
 
@@ -70,4 +70,4 @@ with logger:
         # webview.start(debug=debug, localization=localization, gui="edgehtml")
     else:
         # Linux发行版会根据当前系统使用的GUI套件生成窗口，不需要特别指定使用qt或gtk
-        webview.start(debug=debug, localization=localization)
+        webview.start(http_server=True, debug=debug, localization=localization)

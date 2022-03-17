@@ -4,3 +4,5 @@ export const ImageCodes = [
 	'gitee.com',
 	'github.com'
 ]
+
+export const MessageDuration = 1500

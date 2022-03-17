@@ -11,7 +11,7 @@ export interface ImageBedsResponse {
     screensize: { height: number, width: number }
 }
 
-export interface InitImageBedResponse {
+export interface CommonResponse {
     success: boolean,
     error: string
 }
@@ -38,5 +38,6 @@ export interface InitGitImageBedParams extends GitConfig {
 
 abstract class Api {
     abstract show_image_beds(): Promise<ImageBedsResponse>
-    abstract init_image_bed(data: InitCommonImageBedParams | InitGitImageBedParams): Promise<InitImageBedResponse>
+    abstract init_image_bed(data: InitCommonImageBedParams | InitGitImageBedParams): Promise<CommonResponse>
+    abstract choose_image_bed(imageBedCode: number): Promise<CommonResponse>
 }

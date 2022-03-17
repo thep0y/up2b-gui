@@ -4,7 +4,12 @@
     class="el-input el-input--default el-input-group el-input-group--prepend"
   >
     <div class="el-input-group__prepend">选择图床</div>
-    <el-select v-model="value" placeholder="Select" size="large" style="display: block;">
+    <el-select
+      v-model="imageCode"
+      placeholder="Select"
+      size="large"
+      style="display: block;"
+    >
       <el-option
         v-for="item in options"
         :key="item.value"
@@ -15,17 +20,17 @@
   </div>
   <el-divider content-position="center">配置</el-divider>
   <!-- TODO: 应该添加图床类型，用来判断应该用什么组件，只用 v-if 太麻烦 -->
-  <div v-if="value === 0" id="settings-config">
-    <common-config :image-code="value" />
+  <div v-if="imageCode === 0" id="settings-config">
+    <common-config :image-code="imageCode" />
   </div>
-  <div v-if="value === 1" id="settings-config">
-    <common-config :image-code="value" />
+  <div v-if="imageCode === 1" id="settings-config">
+    <common-config :image-code="imageCode" />
   </div>
-  <div v-if="value === 2" id="settings-config">
-    <git-config :image-code="value" />
+  <div v-if="imageCode === 2" id="settings-config">
+    <git-config :image-code="imageCode" />
   </div>
-  <div v-if="value === 3" id="settings-config">
-    <git-config :image-code="value" />
+  <div v-if="imageCode === 3" id="settings-config">
+    <git-config :image-code="imageCode" />
   </div>
   <div class="tip custom-block">
     <ul>
@@ -57,7 +62,7 @@
           class="mx-1"
           type="success"
           :effect="tag.effect"
-          @click="selectImageBed(tag.index)"
+          @click="selectImageBed(tag)"
         >{{ tag.name }}</el-tag>
       </div>
     </fieldset>
@@ -67,12 +72,12 @@
 <script setup lang='ts'>
 import { ref, onBeforeMount } from 'vue'
 import { Check, Close } from '@element-plus/icons-vue'
-import { showImageBeds } from '../apis'
+import { showImageBeds, chooseImageBed } from '../apis'
 import { ImageBedsResponse } from '../apis/interfaces'
 import CommonConfig from '../components/settings/CommonConfig.vue'
 import GitConfig from '../components/settings/GitConfig.vue'
 import { ElMessage } from 'element-plus'
-import { ImageCodes } from '../apis/consts'
+import { ImageCodes, MessageDuration } from '../apis/consts'
 
 interface Option {
   value: number,
@@ -85,13 +90,13 @@ interface Tag {
   effect: import('element-plus/es/utils').BuildPropType<StringConstructor, 'plain' | 'light' | 'dark', unknown>
 }
 
-const value = ref(-1)
+const imageCode = ref(-1)
 const options = ref(([] as Option[]))
 const configBedTags = ref(([] as Tag[]))
 const automaticCompression = ref(false)
 
 function update(resp: ImageBedsResponse) {
-  value.value = resp.selected
+  imageCode.value = resp.selected
   for (let key in resp.beds) {
     options.value.push({
       value: resp.beds[key],
@@ -103,7 +108,7 @@ function update(resp: ImageBedsResponse) {
       configBedTags.value.push({
         index: i,
         name: ImageCodes[i],
-        effect: i === value.value ? 'dark' : 'plain'
+        effect: i === imageCode.value ? 'dark' : 'plain'
       })
     }
   })
@@ -115,25 +120,40 @@ const toggleAutomaticCompression = function (val: any): any {
   if (val) {
     ElMessage({
       message: '图片自动压缩功能尚不完善，如遇异常请关闭此功能',
-      type: 'warning'
+      type: 'warning',
+      duration: MessageDuration
     })
   }
 }
 
-const selectImageBed = (idx: number) => {
-  if (idx === value.value) {
+const selectImageBed = (tag: Tag) => {
+  if (tag.effect === 'dark') {
     return
   }
 
-  const cur = value.value
-
-  configBedTags.value.forEach((v, i) => {
-    if (cur === v.index) {
-      configBedTags.value[i].effect = 'plain'
+  configBedTags.value.forEach(v => {
+    if (v.effect === 'dark') {
+      // configBedTags.value[i].effect = 'plain'
+      v.effect = 'plain'
+    } else {
+      // configBedTags.value[i].effect = 'dark'
+      v.effect = 'dark'
     }
-    if (idx === v.index) {
-      configBedTags.value[i].effect = 'dark'
-      value.value = v.index
+  })
+
+  chooseImageBed(tag.index, (r) => {
+    if (r.success) {
+      ElMessage({
+        message: '图床切换到 ' + tag.name,
+        type: 'success',
+        duration: MessageDuration
+      })
+    } else {
+      ElMessage({
+        message: r.error,
+        type: 'error',
+        duration: MessageDuration
+      })
     }
   })
 }

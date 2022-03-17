@@ -4,7 +4,7 @@
 # @Email: thepoy@aliyun.com
 # @File Name: __init__.py
 # @Created: 2021-02-19 16:42:55
-# @Modified:  2022-03-11 12:53:00
+# @Modified:  2022-03-17 08:49:17
 
 import os
 import webview
@@ -64,7 +64,6 @@ class Api:
 
         assert isinstance(img_bed_code, int)
 
-        choose_image_bed(img_bed_code)
         self.image_bed = IMAGE_BEDS[img_bed_code]()
 
         # TODO: 判断条件需要修改为根据图床类型执行
@@ -84,13 +83,18 @@ class Api:
             )
         else:
             return {"success": False, "error": "未知的图床代码: %d" % img_bed_code}
+
+        # 认证信息保存成功后才切换图床
+        choose_image_bed(img_bed_code)
+
         return {"success": True, "error": ""}
 
     def choose_image_bed(self, img_bed_code: int):
-        # TODO: 选择图床后，应该将图床对应的认证信息保存到webview窗口，方便直接用窗口上传图片到网站
-        choose_image_bed(img_bed_code)
-        response = {"success": True}
-        return response
+        try:
+            choose_image_bed(img_bed_code)
+            return {"success": True}
+        except Exception as e:
+            return {"success": False, "error": e.args[0]}
 
     def upload_images(self):
         file_types = ("选择要上传的图片 (*.jpg;*.gif;*.png;*.jpeg)",)
