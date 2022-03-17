@@ -21,16 +21,16 @@
   <el-divider content-position="center">配置</el-divider>
   <!-- TODO: 应该添加图床类型，用来判断应该用什么组件，只用 v-if 太麻烦 -->
   <div v-if="imageCode === 0" id="settings-config">
-    <common-config :image-code="imageCode" />
+    <common-config :image-code="imageCode" :tags="configBedTags" />
   </div>
   <div v-if="imageCode === 1" id="settings-config">
-    <common-config :image-code="imageCode" />
+    <common-config :image-code="imageCode" :tags="configBedTags" />
   </div>
   <div v-if="imageCode === 2" id="settings-config">
-    <git-config :image-code="imageCode" />
+    <git-config :image-code="imageCode" :tags="configBedTags" />
   </div>
   <div v-if="imageCode === 3" id="settings-config">
-    <git-config :image-code="imageCode" />
+    <git-config :image-code="imageCode" :tags="configBedTags" />
   </div>
   <div class="tip custom-block">
     <ul>
@@ -49,7 +49,7 @@
       inline-prompt
       :active-icon="Check"
       :inactive-icon="Close"
-      @change="toggleAutomaticCompression"
+      @change="toggleAC"
     />
   </div>
   <div id="select-image-bed">
@@ -72,8 +72,8 @@
 <script setup lang='ts'>
 import { ref, onBeforeMount } from 'vue'
 import { Check, Close } from '@element-plus/icons-vue'
-import { showImageBeds, chooseImageBed } from '../apis'
-import { ImageBedsResponse } from '../apis/interfaces'
+import { showImageBeds, chooseImageBed, toggleAutomaticCompression } from '../apis'
+import { ImageBedsResponse, Tag } from '../apis/interfaces'
 import CommonConfig from '../components/settings/CommonConfig.vue'
 import GitConfig from '../components/settings/GitConfig.vue'
 import { ElMessage } from 'element-plus'
@@ -84,18 +84,12 @@ interface Option {
   label: string
 }
 
-interface Tag {
-  index: number,
-  name: string,
-  effect: import('element-plus/es/utils').BuildPropType<StringConstructor, 'plain' | 'light' | 'dark', unknown>
-}
-
 const imageCode = ref(-1)
 const options = ref(([] as Option[]))
 const configBedTags = ref(([] as Tag[]))
 const automaticCompression = ref(false)
 
-function update(resp: ImageBedsResponse) {
+const update = (resp: ImageBedsResponse) => {
   imageCode.value = resp.selected
   for (let key in resp.beds) {
     options.value.push({
@@ -114,16 +108,26 @@ function update(resp: ImageBedsResponse) {
   })
 }
 
-onBeforeMount(() => window.addEventListener('pywebviewready', () => { showImageBeds(update) }))
+onBeforeMount(() => window.addEventListener('pywebviewready', () => {
+  showImageBeds(update)
+}))
 
-const toggleAutomaticCompression = function (val: any): any {
-  if (val) {
-    ElMessage({
-      message: '图片自动压缩功能尚不完善，如遇异常请关闭此功能',
-      type: 'warning',
-      duration: MessageDuration
-    })
-  }
+const toggleAC = function (val: any): any {
+  toggleAutomaticCompression(val ? 1 : 0, (r) => {
+    if (r.success) {
+      ElMessage({
+        message: '图片自动压缩功能尚不完善，如遇异常请关闭此功能',
+        type: 'warning',
+        duration: MessageDuration
+      })
+    } else {
+      ElMessage({
+        message: '已关闭图片自动压缩',
+        type: 'success',
+        duration: MessageDuration
+      })
+    }
+  })
 }
 
 const selectImageBed = (tag: Tag) => {
@@ -132,12 +136,12 @@ const selectImageBed = (tag: Tag) => {
   }
 
   configBedTags.value.forEach(v => {
-    if (v.effect === 'dark') {
-      // configBedTags.value[i].effect = 'plain'
-      v.effect = 'plain'
-    } else {
-      // configBedTags.value[i].effect = 'dark'
+    if (tag.index == v.index) {
       v.effect = 'dark'
+    } else {
+      if (v.effect === 'dark') {
+        v.effect = 'plain'
+      }
     }
   })
 

@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# @Author: thepoy
-# @Email: thepoy@aliyun.com
-# @File Name: __init__.py
-# @Created: 2021-02-19 16:42:55
-# @Modified:  2022-03-17 08:49:17
+# @Author:    thepoy
+# @Email:     thepoy@163.com
+# @File Name: apis.py
+# @Created:   2022-03-17 12:57:02
+# @Modified:  2022-03-17 21:52:33
 
 import os
 import webview
@@ -25,61 +25,67 @@ from up2b.up2b_lib.constants import (
     IS_WINDOWS,
 )
 from up2b.up2b_lib.errors import OverSizeError, UploadFailed
-from apis.utils import read_config
+from server.utils import read_config
 
 if IS_WINDOWS:
     import ctypes
 
 
 class Api:
+    image_bed_code: int
+
     def __init__(self):
         self.cancel_heavy_stuff_flag = False
-        self.image_bed = None
         self.auto_compress: bool = False
-        # self.conf: Dict[str, str] = read_config(CONF_FILE)
         self.height = self.width = 0
         if IS_WINDOWS:
-            user32 = ctypes.windll.user32  # type: ignore
+            user32 = ctypes.windll.user32
             self.width: int = user32.GetSystemMetrics(0)
             self.height: int = user32.GetSystemMetrics(1) - 30
+        self.conf: Dict[str, Union[str, int]] = read_config(CONF_FILE)
+
+    @property
+    def image_bed(self) -> Union[SM, Imgtu, Gitee, Github]:
+        selected = self.conf.get("image_bed", -1)
+
+        assert isinstance(selected, int)
+        assert selected >= 0
+
+        self.image_bed_code = selected
+        image_bed = IMAGE_BEDS[selected]()
+        image_bed.auto_compress = self.auto_compress
+        return image_bed
 
     def show_image_beds(self):
-        conf: Dict[str, Union[str, int]] = read_config(CONF_FILE)
-        selected = conf.get("image_bed", None)
-        if type(selected) == int:
-            if selected >= 0:  # type: ignore
-                self.image_bed = IMAGE_BEDS[selected]()  # type: ignore
-                self.image_bed.auto_compress = self.auto_compress
         response = {
-            "selected": selected,
+            "selected": self.image_bed.image_bed_code,
             "beds": IMAGE_BEDS_CODE,
-            "auth_data": conf.get("auth_data", None),
+            "auth_data": self.conf.get("auth_data", None),
             "screensize": {"height": self.height, "width": self.width},
         }
         return response
 
     def init_image_bed(self, info: Dict[str, Union[str, int]]):
-        # TODO: 如果有异常，返回false和错误详情
         img_bed_code = info["image-bed"]
 
         assert isinstance(img_bed_code, int)
 
-        self.image_bed = IMAGE_BEDS[img_bed_code]()
+        self.image_bed_code = img_bed_code
 
         # TODO: 判断条件需要修改为根据图床类型执行
-        if img_bed_code == SM_MS:
-            if not self.image_bed.login(info["username"], info["password"]):
+        if self.image_bed_code == SM_MS:
+            if not self.image_bed.login(info["username"], info["password"]):  # type: ignore
                 return {"success": False, "error": "用户名或密码错误"}
-        elif img_bed_code == IMGTU:
-            if not self.image_bed.login(info["username"], info["password"]):
+        elif self.image_bed_code == IMGTU:
+            if not self.image_bed.login(info["username"], info["password"]):  # type: ignore
                 return {"success": False, "error": "用户名或密码错误"}
-        elif img_bed_code == GITEE:
+        elif self.image_bed_code == GITEE:
             self.image_bed.login(
-                info["token"], info["username"], info["repo"], info["folder"]
+                info["token"], info["username"], info["repo"], info["folder"]  # type: ignore
             )
-        elif img_bed_code == GITHUB:
+        elif self.image_bed_code == GITHUB:
             self.image_bed.login(
-                info["token"], info["username"], info["repo"], info["folder"]
+                info["token"], info["username"], info["repo"], info["folder"]  # type: ignore
             )
         else:
             return {"success": False, "error": "未知的图床代码: %d" % img_bed_code}
@@ -92,9 +98,13 @@ class Api:
     def choose_image_bed(self, img_bed_code: int):
         try:
             choose_image_bed(img_bed_code)
+            self.image_bed_code = img_bed_code
             return {"success": True}
         except Exception as e:
             return {"success": False, "error": e.args[0]}
+
+    def drag_file(self, file):
+        print(file)
 
     def upload_images(self):
         file_types = ("选择要上传的图片 (*.jpg;*.gif;*.png;*.jpeg)",)
@@ -122,9 +132,7 @@ class Api:
     def toggle_automatic_compression(self, ac: bool):
         # TODO: 因为自动压缩功能不完善，所以默认是关闭的，每次启动程序都需要手动开启
         self.auto_compress = ac
-        if self.image_bed:
-            self.image_bed.auto_compress = self.auto_compress
-        response = {"success": True, "automatic_compression": self.auto_compress}
+        response = {"success": ac}
         return response
 
     def automatic_compression_status(self):

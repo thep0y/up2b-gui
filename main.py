@@ -4,15 +4,16 @@
 # @Email:     thepoy@163.com
 # @File Name: main.py
 # @Created:   2021-02-19 16:43:08
-# @Modified:  2022-03-17 08:25:10
+# @Modified:  2022-03-17 21:53:10
 
 import os
 import sys
 import platform
 import webview
-from up2b.up2b_lib.utils import logger, is_debug
 
-from apis import Api
+from up2b.up2b_lib.utils import logger, is_debug
+from server import app
+from server.apis import Api
 
 if sys.platform == "linux":
     if "Ubuntu" not in platform.version():
@@ -54,8 +55,7 @@ if sys.platform == "win32":
 
 webview.create_window(
     title,
-    index,
-    js_api=api,
+    app,
     width=min_width,
     height=min_height,
     min_size=(min_width, min_height),
@@ -64,10 +64,7 @@ webview.create_window(
 
 with logger:
     if sys.platform == "win32":
-        webview.start(
-            http_server=True, debug=debug, localization=localization, gui="edgechromium"
-        )
-        # webview.start(debug=debug, localization=localization, gui="edgehtml")
+        webview.start(debug=debug, localization=localization, gui="edgechromium")
     else:
         # Linux发行版会根据当前系统使用的GUI套件生成窗口，不需要特别指定使用qt或gtk
-        webview.start(http_server=True, debug=debug, localization=localization)
+        webview.start(debug=debug, localization=localization)

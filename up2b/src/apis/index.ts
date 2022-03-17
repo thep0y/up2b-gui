@@ -1,3 +1,4 @@
+import axios from 'axios'
 import {
     Pywebview,
     ImageBedsResponse,
@@ -7,25 +8,37 @@ import {
 } from './interfaces'
 
 export function showImageBeds(callback: (r: ImageBedsResponse) => void) {
-    // @ts-ignore
-    const p = pywebview as Pywebview
-    p.api.show_image_beds().then((response: ImageBedsResponse) => {
-        callback(response)
+    axios.get('/getImageBeds').then(r => {
+        const resp: ImageBedsResponse = r.data
+        callback(resp)
     })
 }
 
 export function initImageBeds(data: InitCommonImageBedParams | InitGitImageBedParams, callback: (r: CommonResponse) => void) {
-    // @ts-ignore
-    const p = pywebview as Pywebview
-    p.api.init_image_bed(data).then((response: CommonResponse) => {
-        callback(response)
+    axios.post('/init', data, { headers: { 'Content-Type': 'application/json' } }).then(r => {
+        const resp: CommonResponse = r.data
+        callback(resp)
     })
 }
 
 export function chooseImageBed(imageBedCode: number, callback: (r: CommonResponse) => void) {
+    axios.get('/chooseImageBed/' + imageBedCode).then(r => {
+        const resp: CommonResponse = r.data
+        callback(resp)
+    })
+}
+
+export function toggleAutomaticCompression(ok: number, callback: (r: CommonResponse) => void) {
+    axios.get('/ac/' + ok).then(r => {
+        const resp: CommonResponse = r.data
+        callback(resp)
+    })
+}
+
+export function dragFile(file: any, callback: (r: CommonResponse) => void) {
     // @ts-ignore
     const p = pywebview as Pywebview
-    p.api.choose_image_bed(imageBedCode).then((response: CommonResponse) => {
+    p.api.drag_file(file).then((response: CommonResponse) => {
         callback(response)
     })
 }

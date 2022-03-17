@@ -32,11 +32,12 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { ElMessage, FormInstance } from 'element-plus'
-import { CommonConfig as CommonForm, InitCommonImageBedParams } from '../../apis/interfaces'
+import { CommonConfig as CommonForm, InitCommonImageBedParams, Tag } from '../../apis/interfaces'
 import { initImageBeds } from '../../apis'
 import { ImageCodes } from '../../apis/consts'
+import { addTag } from './common'
 
-const props = defineProps({ imageCode: { type: Number, required: true } })
+const props = defineProps({ imageCode: { type: Number, required: true }, tags: { type: Array, required: true } })
 
 const commonFormRef = ref<FormInstance>()
 const commonForm = ref(({} as CommonForm))
@@ -69,6 +70,28 @@ const submitForm = (formEl: FormInstance | undefined) => {
                         type: 'success'
                     })
                     formEl.resetFields()
+
+                    addTag(props.tags as Tag[], props.imageCode)
+                    // let exits = false, darkIdx = -1
+                    // for (let i = 0; i < props.tags.length; i++) {
+                    //     const tag = props.tags[i] as Tag
+                    //     if (tag.index == props.imageCode) {
+                    //         exits = true
+                    //     } else {
+                    //         if (tag.effect == 'dark') {
+                    //             darkIdx = i
+                    //         }
+                    //     }
+                    // }
+
+                    // if (!exits && darkIdx >= 0) {
+                    //     (props.tags[darkIdx] as Tag).effect = 'plain';
+                    //     (props.tags as Tag[]).push({
+                    //         index: props.imageCode,
+                    //         name: ImageCodes[props.imageCode],
+                    //         effect: 'dark'
+                    //     })
+                    // }
                 } else {
                     ElMessage.error(r.error)
                 }
