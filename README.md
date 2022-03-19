@@ -4,7 +4,9 @@
 
 基于[pywebview](https://github.com/r0x0r/pywebview)和[up2b](https://github.com/thep0y/up2b)写的图床管理软件。
 
-![示意动图](https://cdn.jsdelivr.net/gh/thep0y/image-bed/md/1627305852264243.png)
+正在重构的动图演示：
+
+![output](https://s2.loli.net/2022/03/19/yUT3QZ9FND5kVfX.png)
 
 ## 特点
 
