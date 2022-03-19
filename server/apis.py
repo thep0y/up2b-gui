@@ -4,12 +4,12 @@
 # @Email:     thepoy@163.com
 # @File Name: apis.py
 # @Created:   2022-03-17 12:57:02
-# @Modified:  2022-03-17 21:52:33
+# @Modified:  2022-03-19 23:22:49
 
 import os
 import webview
 
-from typing import Dict, Union
+from typing import Dict, List, Union
 from up2b import IMAGE_BEDS
 from up2b.up2b_lib.up2b_api import CONF_FILE, choose_image_bed
 from up2b.up2b_lib.up2b_api.sm import SM
@@ -42,25 +42,33 @@ class Api:
             user32 = ctypes.windll.user32
             self.width: int = user32.GetSystemMetrics(0)
             self.height: int = user32.GetSystemMetrics(1) - 30
-        self.conf: Dict[str, Union[str, int]] = read_config(CONF_FILE)
+        self.conf: Dict[str, Union[List[Dict[str, str]], int]] = read_config(CONF_FILE)
 
-    @property
-    def image_bed(self) -> Union[SM, Imgtu, Gitee, Github]:
         selected = self.conf.get("image_bed", -1)
 
         assert isinstance(selected, int)
         assert selected >= 0
 
         self.image_bed_code = selected
-        image_bed = IMAGE_BEDS[selected]()
+
+    @property
+    def image_bed(self) -> Union[SM, Imgtu, Gitee, Github]:
+        image_bed = IMAGE_BEDS[self.image_bed_code]()
         image_bed.auto_compress = self.auto_compress
         return image_bed
 
     def show_image_beds(self):
+        auth_data = self.conf.get("auth_data", None)
+        if auth_data:
+            assert isinstance(auth_data, list)
+
+            for i in range(len(auth_data)):
+                auth_data[i]["type"] = IMAGE_BEDS[i]().image_bed_type.value
+
         response = {
             "selected": self.image_bed.image_bed_code,
             "beds": IMAGE_BEDS_CODE,
-            "auth_data": self.conf.get("auth_data", None),
+            "auth_data": auth_data,
             "screensize": {"height": self.height, "width": self.width},
         }
         return response
@@ -120,7 +128,7 @@ class Api:
         urls = []
         if image_paths:
             try:
-                urls = self.image_bed.upload_images(image_paths)  # type: ignore
+                urls = self.image_bed.upload_images(image_paths)
             except OverSizeError as e:
                 return {"success": False, "error": f"图片超限了 - {e}"}
             except UploadFailed as e:
@@ -148,37 +156,36 @@ class Api:
 
     def view_image_in_new_windows(self, url: str, width: int, height: int):
         image_name = os.path.basename(url)
-        # TODO: 根据当前屏幕尺寸显示大图
-        if IS_WINDOWS:
-            width = self.width if width + 20 > self.width else width + 38
-            height = self.height if height + 20 > self.height else height + 72
-        else:
-            width = width + 20
-            height = height + 20
+
+        width_delta = 38 if IS_WINDOWS else 20
+        height_delta = 72 if IS_WINDOWS else 20
+
+        max_width = 1920 - 38
+        max_height = 1080 - 72
+
+        # 最大窗口尺寸 1920x1080
+        if width > max_width:
+            height = int(float(height) * (max_width / width))
+            width = max_width
+
+        if height > max_height:
+            width = int(float(width) * (max_height / height))
+            height = max_height
+
+        print(width, height)
+
         webview.create_window(
             image_name,
-            html="<img src='%s'></img>" % url,
-            width=width,
-            height=height,
+            html=f"<img src='{url}' width='{width}' height='{height}'></img>",
+            width=width + width_delta,
+            height=height + height_delta,
             resizable=False,
         )
 
     def delete_image(self, *args):
-        result = self.image_bed.delete_image(*args)  # type: ignore
+        result = self.image_bed.delete_image(*args)
 
-        if (
-            isinstance(self.image_bed, SM)
-            or isinstance(self.image_bed, Gitee)
-            or isinstance(self.image_bed, Github)
-        ):
-            return {"success": result}
-        elif isinstance(self.image_bed, Imgtu):
-            status_code = result["status_code"]
-            success = status_code == 200
-            if success:
-                return {"success": success}
-            error = result["error"]["message"]
-            response = {"success": success, "error": error}
-            return response
-        else:
-            return {"success": False, "error": "未知的图床"}
+        if not result:
+            return {"success": True}
+
+        return {"success": False, "error": result.to_dict()}

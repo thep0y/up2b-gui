@@ -4,7 +4,7 @@
 # @Email:     thepoy@163.com
 # @File Name: main.py
 # @Created:   2021-02-19 16:43:08
-# @Modified:  2022-03-17 21:53:10
+# @Modified:  2022-03-18 08:14:08
 
 import os
 import sys
@@ -46,6 +46,7 @@ localization = {
 }
 
 min_width, min_height = 520, 777
+
 debug = is_debug()
 title = f"up2b {__version__} debug" if debug else f"up2b {__version__}"
 index = "assets/index.html"
