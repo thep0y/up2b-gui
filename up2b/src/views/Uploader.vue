@@ -1,10 +1,13 @@
 <template>
     <el-upload
+        ref="upload"
+        :action="action"
         class="upload"
+        list-type="picture-card"
         drag
-        action="/upload"
         multiple
-        :limit="10"
+        :limit="20"
+        accept="image/jpg, image/jpeg, image/png, image/gif"
         @exceed="exceed"
         @error="handleError"
         @success="handleSuccess"
@@ -12,68 +15,189 @@
         <el-icon class="el-icon--upload">
             <upload-filled />
         </el-icon>
-        <div class="el-upload__text">
-            将图片拖拽到此虚线框内或
-            <em>点击上传</em>
-        </div>
         <template #tip>
-            <div class="el-upload__tip">一次最多上传10张图片</div>
+            <div class="el-upload__tip">
+                支持拖拽或点击
+                <br />最多保留
+                <b>20</b>
+                条上传记录
+                <br />超过20条时请点击下面的按钮清空上传列表
+            </div>
+        </template>
+        <template #file="{ file }">
+            <div>
+                <img
+                    v-if="file.status !== 'uploading'"
+                    class="el-upload-list__item-thumbnail"
+                    :src="file.url"
+                />
+
+                <div v-if="file.status === 'uploading'" class="el-upload-list__item-info">
+                    <el-progress
+                        v-if="file.status === 'uploading'"
+                        type="circle"
+                        :stroke-width="6"
+                        :percentage="Number(file.percentage)"
+                    />
+                </div>
+
+                <label class="el-upload-list__item-status-label">
+                    <el-icon class="el-icon el-icon--upload-success el-icon--check">
+                        <Check />
+                    </el-icon>
+                </label>
+
+                <span class="el-upload-list__item-actions">
+                    <span
+                        class="el-upload-list__item-preview"
+                        @click="handlePictureCardPreview(file)"
+                    >
+                        <el-icon>
+                            <zoom-in />
+                        </el-icon>
+                    </span>
+                    <span
+                        v-if="!disabled"
+                        class="el-upload-list__item-delete"
+                        @click="copyURL(file)"
+                    >
+                        <el-icon>
+                            <CopyDocument />
+                        </el-icon>
+                    </span>
+                    <span
+                        v-if="!disabled"
+                        class="el-upload-list__item-delete"
+                        @click="handleRemove(file)"
+                    >
+                        <el-icon>
+                            <Delete />
+                        </el-icon>
+                    </span>
+                </span>
+            </div>
         </template>
     </el-upload>
     <div style="height: 10px;" />
-    <el-divider content-position="left">已上传的图片</el-divider>
-    <div id="uploaded-preview">
-        <el-image
-            v-for="url in uploadedURLs"
-            :key="url"
-            style="width: 100px;"
-            :src="url"
-            fit="cover"
-            @click="copyURL"
-        />
-    </div>
+    <el-alert
+        v-if="showExceedError.show"
+        title="最多 20 张！"
+        :description="`已上传 ${showExceedError.uploaded} 张，最多还可上传 ${showExceedError.remain} 张，但你选择了 ${showExceedError.selected} 张，可以点击下面的按钮清空上传列表`"
+        type="error"
+        show-icon
+        @close="removeExceedAlert"
+    />
+    <el-tooltip class="box-item" effect="dark" content="清空已上传图片列表" placement="left">
+        <el-button type="primary" :icon="Refresh" circle @click="clearFiles" />
+    </el-tooltip>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { UploadFiles } from 'element-plus'
-import { UploadFilled } from '@element-plus/icons-vue'
-import { ElMessage } from 'element-plus'
-import { MessageDuration } from '../apis/consts';
+import { ElMessage, UploadFile, UploadFiles } from 'element-plus'
+import { UploadFilled, Refresh, Check, ZoomIn, CopyDocument, Delete } from '@element-plus/icons-vue'
 import { UploadAjaxError } from 'element-plus/es/components/upload/src/ajax';
-import { UploadResponse } from '../apis/interfaces';
+import {
+    previewInNewWindow,
+    MessageDuration,
+    UploadResponse,
+    ErrorResponse
+} from '../apis';
 
-const exceed = (files: File[], uploadFiles: UploadFiles) => {
-    ElMessage({
-        message: '最多上传 10 张图片，你选择了 ' + files.length + ' 张',
-        type: 'error',
-        duration: MessageDuration
+const action = import.meta.env.VITE_APP_BASE_API + '/upload'
+
+const upload = ref()
+const disabled = ref(false)
+
+const handleRemove = (file: UploadFile) => {
+    upload.value.handleRemove(file)
+}
+
+const handlePictureCardPreview = (file: UploadFile) => {
+    const img = new Image()
+    img.src = file.url!
+
+    const resp = file.response as UploadResponse
+
+    previewInNewWindow({
+        url: resp.url,
+        width: img.width,
+        height: img.height
+    }, (r) => {
+        if (r.success) {
+            ElMessage({
+                message: '已在新窗口中打开大图',
+                type: 'success',
+                duration: MessageDuration
+            })
+        } else {
+            ElMessage({
+                message: r.error,
+                type: 'error',
+                duration: MessageDuration
+            })
+            window.open(resp.url)
+        }
     })
+}
 
-    if (uploadFiles.length > 0) {
-        uploadFiles = []
+const showExceedError = ref({
+    show: false,
+    uploaded: 0,
+    remain: 0,
+    selected: 0
+})
+const exceed = (files: File[], uploadFiles: UploadFiles) => {
+    showExceedError.value.show = true
+    showExceedError.value.uploaded = uploadFiles.length
+    showExceedError.value.remain = 20 - uploadFiles.length
+    showExceedError.value.selected = files.length
+}
+const removeExceedAlert = () => {
+    showExceedError.value = {
+        show: false,
+        uploaded: 0,
+        remain: 0,
+        selected: 0
     }
 }
 
+// 上传错误
 const handleError = (error: Error) => {
-    const resp = JSON.parse((error as UploadAjaxError).message)
-    ElMessage({
-        message: resp.error,
-        type: 'error',
-        duration: MessageDuration
-    })
+    const resp: ErrorResponse = JSON.parse((error as UploadAjaxError).message)
+    if (resp.error.status_code == 409) {
+        ElMessage.error('上传太频繁，触发服务器并发限制，请稍后重新上传失败的图片')
+    } else {
+        ElMessage({
+            message: resp.error.image_path + ': ' + resp.error.status_code + ',   ' + resp.error.error,
+            type: 'error',
+            duration: MessageDuration
+        })
+    }
 }
 
 const uploadedURLs = ref(([] as string[]))
 
 const handleSuccess = (resp: UploadResponse) => {
-    uploadedURLs.value.push(resp.url)
+    if (resp.success) {
+        uploadedURLs.value.push(resp.url)
+    } else {
+        ElMessage({
+            message: resp.image + ': ' + JSON.stringify(resp.error),
+            type: 'error',
+            duration: MessageDuration
+        })
+    }
 }
 
-const copyURL = (e: MouseEvent) => {
+const clearFiles = () => {
+    upload.value.clearFiles()
+}
+
+const copyURL = (file: UploadFile) => {
+    file.status
     //@ts-ignore
-    const url: string = e.target.attributes.src.value
-    navigator.clipboard.writeText(url).then(() => {
+    navigator.clipboard.writeText(file.response.url).then(() => {
         ElMessage.success('图片链接已复制到剪贴板')
     }).catch(r => {
         ElMessage.error(r)
@@ -99,10 +223,27 @@ const copyURL = (e: MouseEvent) => {
 
 .upload .el-upload-dragger {
     width: 100%;
+    height: 100%;
+    border: none;
 }
 
 #uploaded-preview img {
     margin: 10px;
     cursor: pointer;
+}
+
+li.el-upload-list__item > div {
+    width: 100%;
+}
+
+.el-alert__title {
+    float: left;
+}
+
+p.el-alert__description {
+    float: left;
+    width: 100%;
+    text-align: left;
+    font-weight: 400;
 }
 </style>

@@ -35,7 +35,7 @@ import { ElMessage, FormInstance } from 'element-plus'
 import { CommonConfig as CommonForm, InitCommonImageBedParams, Tag } from '../../apis/interfaces'
 import { initImageBeds } from '../../apis'
 import { ImageCodes } from '../../apis/consts'
-import { addTag } from './common'
+import { addTag, switchTag } from './common'
 
 const props = defineProps({ imageCode: { type: Number, required: true }, tags: { type: Array, required: true } })
 
@@ -53,7 +53,7 @@ const rules = ref({
 
 const submitForm = (formEl: FormInstance | undefined) => {
     if (!formEl) return
-    formEl.validate((valid, fields) => {
+    formEl.validate((valid) => {
         if (valid) {
             openLoading()
 
@@ -66,38 +66,18 @@ const submitForm = (formEl: FormInstance | undefined) => {
                 loading.value = false
                 if (r.success) {
                     ElMessage({
-                        message: `已保存 ${ImageCodes[props.imageCode]} 配置信息`,
+                        message: `已保存或更新 ${ImageCodes[props.imageCode]} 配置信息`,
                         type: 'success'
                     })
                     formEl.resetFields()
 
                     addTag(props.tags as Tag[], props.imageCode)
-                    // let exits = false, darkIdx = -1
-                    // for (let i = 0; i < props.tags.length; i++) {
-                    //     const tag = props.tags[i] as Tag
-                    //     if (tag.index == props.imageCode) {
-                    //         exits = true
-                    //     } else {
-                    //         if (tag.effect == 'dark') {
-                    //             darkIdx = i
-                    //         }
-                    //     }
-                    // }
-
-                    // if (!exits && darkIdx >= 0) {
-                    //     (props.tags[darkIdx] as Tag).effect = 'plain';
-                    //     (props.tags as Tag[]).push({
-                    //         index: props.imageCode,
-                    //         name: ImageCodes[props.imageCode],
-                    //         effect: 'dark'
-                    //     })
-                    // }
+                    switchTag(props.tags as Tag[], props.imageCode)
                 } else {
                     ElMessage.error(r.error)
                 }
             })
         } else {
-            console.log('error submit!', fields)
             return false
         }
     })

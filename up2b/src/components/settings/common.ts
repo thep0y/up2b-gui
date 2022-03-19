@@ -23,3 +23,14 @@ export const addTag = (tags: Tag[], imageCode: number) => {
         })
     }
 }
+
+export const switchTag = (tags: Tag[], idx: number) => {
+    console.log('切换到', idx)
+    for (let i = 0; i < tags.length; i++) {
+        if ((tags[i] as Tag).index == idx) {
+            (tags[i] as Tag).effect = 'dark'
+        } else {
+            (tags[i] as Tag).effect = 'plain'
+        }
+    }
+}

@@ -1,44 +1,61 @@
 import axios from 'axios'
 import {
-    Pywebview,
     ImageBedsResponse,
     CommonResponse,
     InitCommonImageBedParams,
-    InitGitImageBedParams
+    InitGitImageBedParams,
+    PreviewRequest,
 } from './interfaces'
 
+type Method = 'GET' | 'POST'
+
+const request = (url: string, method: Method, data?: string) => {
+    return axios.request({
+        url: import.meta.env.VITE_APP_BASE_API + url,
+        method: method,
+        data: data,
+        headers: method == 'GET' ? undefined : { 'Content-Type': 'application/json' }
+    })
+}
+
 export function showImageBeds(callback: (r: ImageBedsResponse) => void) {
-    axios.get('/getImageBeds').then(r => {
+    request('/getImageBeds', 'GET').then(r => {
         const resp: ImageBedsResponse = r.data
         callback(resp)
     })
 }
 
 export function initImageBeds(data: InitCommonImageBedParams | InitGitImageBedParams, callback: (r: CommonResponse) => void) {
-    axios.post('/init', data, { headers: { 'Content-Type': 'application/json' } }).then(r => {
+    request('/init', 'POST', JSON.stringify(data)).then(r => {
         const resp: CommonResponse = r.data
         callback(resp)
     })
 }
 
 export function chooseImageBed(imageBedCode: number, callback: (r: CommonResponse) => void) {
-    axios.get('/chooseImageBed/' + imageBedCode).then(r => {
+    request('/chooseImageBed/' + imageBedCode, 'GET').then(r => {
         const resp: CommonResponse = r.data
         callback(resp)
     })
 }
 
 export function toggleAutomaticCompression(ok: number, callback: (r: CommonResponse) => void) {
-    axios.get('/ac/' + ok).then(r => {
+    request('/ac/' + ok, 'GET').then(r => {
         const resp: CommonResponse = r.data
         callback(resp)
     })
 }
 
-export function dragFile(file: any, callback: (r: CommonResponse) => void) {
-    // @ts-ignore
-    const p = pywebview as Pywebview
-    p.api.drag_file(file).then((response: CommonResponse) => {
-        callback(response)
+export function previewInNewWindow(r: PreviewRequest, callback: (r: CommonResponse) => void) {
+    request('/preview', 'POST', JSON.stringify(r)).then(r => {
+        const resp: CommonResponse = r.data
+        callback(resp)
     })
 }
+
+// export function getImageList(callback: (r: CommonResponse) => void) {
+
+// }
+
+export * from "./consts"
+export * from "./interfaces"

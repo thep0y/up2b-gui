@@ -62,6 +62,7 @@
         "vue/no-mutating-props": "off",
         "vue/require-prop-types": "off",
         "vue/multiline-html-element-content-newline": "off",
+        "vue/html-self-closing": "off",
         "vue/html-indent": "off"
     }
 }

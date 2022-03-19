@@ -41,11 +41,12 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { FormInstance, ElMessage } from 'element-plus'
-import { GitConfig as GitForm, InitGitImageBedParams } from '../../apis/interfaces'
+import { GitConfig as GitForm, InitGitImageBedParams, Tag } from '../../apis/interfaces'
 import { initImageBeds } from '../../apis'
 import { ImageCodes } from '../../apis/consts'
+import { addTag, switchTag } from './common'
 
-const props = defineProps({ imageCode: { type: Number, required: true } })
+const props = defineProps({ imageCode: { type: Number, required: true }, tags: { type: Array, required: true } })
 
 const gitFormRef = ref<FormInstance>()
 const gitForm = ref(({} as GitForm))
@@ -63,7 +64,7 @@ const openLoading = () => {
 }
 const submitForm = (formEl: FormInstance | undefined) => {
     if (!formEl) return
-    formEl.validate((valid, fields) => {
+    formEl.validate((valid) => {
         if (valid) {
             openLoading()
 
@@ -78,13 +79,16 @@ const submitForm = (formEl: FormInstance | undefined) => {
                 loading.value = false
                 if (r.success) {
                     ElMessage({
-                        message: `已保存 ${ImageCodes[props.imageCode]} 配置信息`,
+                        message: `已保存或更新 ${ImageCodes[props.imageCode]} 配置信息`,
                         type: 'success'
                     })
                 }
+                formEl.resetFields()
+
+                addTag(props.tags as Tag[], props.imageCode)
+                switchTag(props.tags as Tag[], props.imageCode)
             })
         } else {
-            console.log('error submit!', fields)
             return false
         }
     })

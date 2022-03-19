@@ -5,7 +5,7 @@
   >
     <div class="el-input-group__prepend">选择图床</div>
     <el-select
-      v-model="imageCode"
+      v-model="selectedCode"
       placeholder="Select"
       size="large"
       style="display: block;"
@@ -19,18 +19,11 @@
     </el-select>
   </div>
   <el-divider content-position="center">配置</el-divider>
-  <!-- TODO: 应该添加图床类型，用来判断应该用什么组件，只用 v-if 太麻烦 -->
-  <div v-if="imageCode === 0" id="settings-config">
-    <common-config :image-code="imageCode" :tags="configBedTags" />
+  <div v-if="imageBedTypes[selectedCode] === 1" id="settings-config">
+    <common-config :image-code="selectedCode" :tags="configBedTags" />
   </div>
-  <div v-if="imageCode === 1" id="settings-config">
-    <common-config :image-code="imageCode" :tags="configBedTags" />
-  </div>
-  <div v-if="imageCode === 2" id="settings-config">
-    <git-config :image-code="imageCode" :tags="configBedTags" />
-  </div>
-  <div v-if="imageCode === 3" id="settings-config">
-    <git-config :image-code="imageCode" :tags="configBedTags" />
+  <div v-if="imageBedTypes[selectedCode] === 2" id="settings-config">
+    <git-config :image-code="selectedCode" :tags="configBedTags" />
   </div>
   <div class="tip custom-block">
     <ul>
@@ -71,26 +64,35 @@
 
 <script setup lang='ts'>
 import { ref, onBeforeMount } from 'vue'
+import { ElMessage } from 'element-plus'
 import { Check, Close } from '@element-plus/icons-vue'
-import { showImageBeds, chooseImageBed, toggleAutomaticCompression } from '../apis'
-import { ImageBedsResponse, Tag } from '../apis/interfaces'
+import {
+  showImageBeds,
+  chooseImageBed,
+  toggleAutomaticCompression,
+  ImageBedsResponse,
+  Tag,
+  ImageCodes,
+  MessageDuration
+} from '../apis'
 import CommonConfig from '../components/settings/CommonConfig.vue'
 import GitConfig from '../components/settings/GitConfig.vue'
-import { ElMessage } from 'element-plus'
-import { ImageCodes, MessageDuration } from '../apis/consts'
 
 interface Option {
   value: number,
   label: string
 }
 
-const imageCode = ref(-1)
+let imageBedTypes: number[] = []
+
+const selectedCode = ref(-1)
+
 const options = ref(([] as Option[]))
 const configBedTags = ref(([] as Tag[]))
 const automaticCompression = ref(false)
 
 const update = (resp: ImageBedsResponse) => {
-  imageCode.value = resp.selected
+  selectedCode.value = resp.selected
   for (let key in resp.beds) {
     options.value.push({
       value: resp.beds[key],
@@ -99,18 +101,24 @@ const update = (resp: ImageBedsResponse) => {
   }
   resp.auth_data.forEach((v, i) => {
     if (Object.keys(v).length > 0) {
+      imageBedTypes.push(v.type)
+
       configBedTags.value.push({
         index: i,
         name: ImageCodes[i],
-        effect: i === imageCode.value ? 'dark' : 'plain'
+        effect: selectedCode.value === i ? 'dark' : 'plain'
       })
     }
   })
 }
 
-onBeforeMount(() => window.addEventListener('pywebviewready', () => {
+if (import.meta.env.DEV) {
   showImageBeds(update)
-}))
+} else {
+  onBeforeMount(() => window.addEventListener('pywebviewready', () => {
+    showImageBeds(update)
+  }))
+}
 
 const toggleAC = function (val: any): any {
   toggleAutomaticCompression(val ? 1 : 0, (r) => {
