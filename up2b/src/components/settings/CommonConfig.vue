@@ -71,6 +71,8 @@ const submitForm = (formEl: FormInstance | undefined) => {
                     })
                     formEl.resetFields()
 
+                    // TODO: 配置保存后清空图片列表
+
                     addTag(props.tags as Tag[], props.imageCode)
                     switchTag(props.tags as Tag[], props.imageCode)
                 } else {
