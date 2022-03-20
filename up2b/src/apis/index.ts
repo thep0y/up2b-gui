@@ -1,10 +1,12 @@
 import axios from 'axios'
-import {
+import type {
     ImageBedsResponse,
     CommonResponse,
     InitCommonImageBedParams,
     InitGitImageBedParams,
     PreviewRequest,
+    ImageListResponse,
+    DeleteParamsType
 } from './interfaces'
 
 type Method = 'GET' | 'POST'
@@ -53,9 +55,19 @@ export function previewInNewWindow(r: PreviewRequest, callback: (r: CommonRespon
     })
 }
 
-// export function getImageList(callback: (r: CommonResponse) => void) {
+export function getAllImages(callback: (r: ImageListResponse) => void) {
+    request('/getAllImages', 'GET').then(r => {
+        const resp: ImageListResponse = r.data
+        callback(resp)
+    })
+}
 
-// }
+export function deleteImage(params: DeleteParamsType, callback: (r: ImageListResponse) => void) {
+    request('/delete', 'POST', JSON.stringify(params)).then(r => {
+        const resp: ImageListResponse = r.data
+        callback(resp)
+    })
+}
 
-export * from "./consts"
-export * from "./interfaces"
+export * from './consts'
+export * from './interfaces'

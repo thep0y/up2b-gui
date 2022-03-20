@@ -4,14 +4,14 @@
 # @Email:     thepoy@163.com
 # @File Name: apis.py
 # @Created:   2022-03-17 12:57:02
-# @Modified:  2022-03-19 23:22:49
+# @Modified:  2022-03-20 21:47:22
 
 import os
 import webview
 
 from typing import Dict, List, Union
 from up2b import IMAGE_BEDS
-from up2b.up2b_lib.up2b_api import CONF_FILE, choose_image_bed
+from up2b.up2b_lib.up2b_api import CONF_FILE, GitBase, choose_image_bed
 from up2b.up2b_lib.up2b_api.sm import SM
 from up2b.up2b_lib.up2b_api.imgtu import Imgtu
 from up2b.up2b_lib.up2b_api.gitee import Gitee
@@ -26,6 +26,7 @@ from up2b.up2b_lib.constants import (
 )
 from up2b.up2b_lib.errors import OverSizeError, UploadFailed
 from server.utils import read_config
+from server.types import GIT_DELETE_PARAMS, IMGTU_DELETE_PARAMS, SMMS_DELETE_PARAMS
 
 if IS_WINDOWS:
     import ctypes
@@ -149,10 +150,7 @@ class Api:
     def get_all_images(self):
         if self.image_bed:
             images = self.image_bed.get_all_images()
-        else:
-            images = []
-        response = {"success": True, "images": images}
-        return response
+            return images
 
     def view_image_in_new_windows(self, url: str, width: int, height: int):
         image_name = os.path.basename(url)
@@ -182,8 +180,18 @@ class Api:
             resizable=False,
         )
 
-    def delete_image(self, *args):
-        result = self.image_bed.delete_image(*args)
+    def delete_image(
+        self, params: Union[SMMS_DELETE_PARAMS, IMGTU_DELETE_PARAMS, GIT_DELETE_PARAMS]
+    ):
+        if isinstance(params, SMMS_DELETE_PARAMS):
+            assert isinstance(self.image_bed, SM)
+            result = self.image_bed.delete_image(params.delete_url)
+        elif isinstance(params, IMGTU_DELETE_PARAMS):
+            assert isinstance(self.image_bed, Imgtu)
+            result = self.image_bed.delete_image(params.id)
+        else:
+            assert isinstance(self.image_bed, GitBase)
+            result = self.image_bed.delete_image(params.sha, params.delete_url)
 
         if not result:
             return {"success": True}

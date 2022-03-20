@@ -1,5 +1,5 @@
 <template>
-  <el-tabs type="border-card" class="title-tabs" stretch>
+  <el-tabs type="border-card" class="title-tabs" stretch @tab-click="getAllImagesEvent">
     <el-tab-pane>
       <template #label>
         <span class="custom-tabs-label">
@@ -11,16 +11,25 @@
       </template>
       <uploader />
     </el-tab-pane>
-    <el-tab-pane>
+    <el-tab-pane lazy>
       <template #label>
         <span class="custom-tabs-label">
           <el-icon>
             <icon-menu />
           </el-icon>
-          <span>图片列表</span>
+          <span>
+            图片列表
+            <el-tag
+              v-if="imageListRef.length > 0"
+              id="counter-tag"
+              type="success"
+              effect="dark"
+            >{{ imageListRef.length }}</el-tag>
+          </span>
         </span>
       </template>
-      <image-list-vue />
+      <image-list-vue v-if="imageListRef.length > 0" :image-list="imageListRef" />
+      <el-empty v-else description="空空如也" />
     </el-tab-pane>
     <el-tab-pane>
       <template #label>
@@ -31,12 +40,15 @@
           <span>设置</span>
         </span>
       </template>
-      <settings />
+      <settings :image-list="imageListRef" />
     </el-tab-pane>
   </el-tabs>
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue'
+import type { TabsPaneContext } from 'element-plus'
+import { ElLoading, ElMessage } from 'element-plus'
 import {
   Upload,
   Menu as IconMenu,
@@ -45,10 +57,37 @@ import {
 import Uploader from './views/Uploader.vue'
 import ImageListVue from './views/ImageList.vue';
 import Settings from './views/Settings.vue'
+import { getAllImages, ImageListType } from './apis'
+
+const imageListRef = ref<ImageListType>([])
+
+const getAllImagesEvent = (pane: TabsPaneContext) => {
+  if (pane.index !== '1') {
+    return
+  }
+
+  if (imageListRef.value.length == 0) {
+    const loading = ElLoading.service({
+      lock: true,
+      text: '正在获取图片列表',
+      background: 'rgba(255, 255, 255, 0.8)'
+    })
+
+    getAllImages((r) => {
+      loading.close()
+
+      if (r.success) {
+        imageListRef.value = r.urls
+      } else {
+        ElMessage.error(r.error.error.toString())
+      }
+    })
+  }
+}
 
 </script>
 
-<style type="text/css">
+<style>
 #app {
   font-family: -apple-system, "PingFang SC", sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -74,5 +113,24 @@ import Settings from './views/Settings.vue'
 .title-tabs .custom-tabs-label span {
   vertical-align: middle;
   margin-left: 4px;
+}
+.el-tabs__content {
+  height: calc(100% - 66px);
+}
+.el-tab-pane {
+  height: 100%;
+}
+.el-empty {
+  height: 100%;
+}
+.el-tabs__content {
+  overflow: auto;
+}
+#counter-tag {
+  height: 18px;
+  padding: 0 3px;
+}
+#counter-tag .el-tag__content {
+  margin-left: 0;
 }
 </style>

@@ -4,15 +4,18 @@
 # @Email:     thepoy@163.com
 # @File Name: __init__.py
 # @Created:   2022-03-17 11:44:25
-# @Modified:  2022-03-19 14:28:20
+# @Modified:  2022-03-20 21:47:03
 
 import time
 
 from flask import Flask, jsonify, send_from_directory, request
-from up2b.up2b_lib.custom_types import ImageStream
+from up2b.up2b_lib.custom_types import ErrorResponse, ImageStream
+from up2b.up2b_lib.up2b_api.imgtu import Imgtu
+from up2b.up2b_lib.up2b_api.sm import SM
 from up2b.up2b_lib.up2b_api.github import Github
 from server.consts import ASSETS_DIR, GET, INDEX_PATH, POST, STATIC_DIR
 from server.apis import Api
+from server.types import GIT_DELETE_PARAMS, IMGTU_DELETE_PARAMS, SMMS_DELETE_PARAMS
 
 app = Flask(__name__, static_folder=STATIC_DIR, static_url_path="/assets")
 api = Api()
@@ -55,7 +58,7 @@ async def toggle_automatic_compression(status: int):
 
 
 @app.route("/upload", methods=[POST])
-def upload():
+async def upload():
     if "file" not in request.files:
         return jsonify(success=False), 400
 
@@ -83,8 +86,20 @@ def upload():
     return jsonify(success=False, error=result.to_dict()), result.status_code
 
 
+@app.route("/getAllImages", methods=[GET])
+async def get_all_images():
+    images = api.get_all_images()
+    if images is None:
+        return jsonify(success=False, error="尚未选择图床"), 400
+
+    if isinstance(images, ErrorResponse):
+        return jsonify(success=False, error=images.to_dict()), 400
+
+    return jsonify(success=True, image_code=api.image_bed_code, urls=images), 200
+
+
 @app.route("/preview", methods=[POST])
-def preview():
+async def preview():
     data = request.get_json()
 
     assert data is not None
@@ -94,3 +109,22 @@ def preview():
         return jsonify(success=True), 200
 
     return jsonify(success=False, error="当前为开发环境，无法打开新窗口，用打开一个新的浏览器标签页替代"), 200
+
+
+@app.route("/delete", methods=[POST])
+async def delete():
+    data = request.get_json()
+
+    assert data is not None
+
+    print("*******\n", data)
+
+    if isinstance(api.image_bed, SM):
+        params = SMMS_DELETE_PARAMS(data["delete_url"])
+    elif isinstance(api.image_bed, Imgtu):
+        params = IMGTU_DELETE_PARAMS(data["id"])
+    else:
+        params = GIT_DELETE_PARAMS(data["sha"], data["delete_url"])
+
+    result = api.delete_image(params)
+    return jsonify(result)

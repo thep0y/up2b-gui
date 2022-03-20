@@ -63,20 +63,21 @@
 </template>
 
 <script setup lang='ts'>
-import { ref, onBeforeMount } from 'vue'
+import { ref, onBeforeMount, PropType } from 'vue'
 import { ElMessage } from 'element-plus'
 import { Check, Close } from '@element-plus/icons-vue'
 import {
   showImageBeds,
   chooseImageBed,
   toggleAutomaticCompression,
-  ImageBedsResponse,
-  Tag,
   ImageCodes,
   MessageDuration
 } from '../apis'
+import type { ImageListType, ImageBedsResponse, Tag } from '../apis'
 import CommonConfig from '../components/settings/CommonConfig.vue'
 import GitConfig from '../components/settings/GitConfig.vue'
+
+const props = defineProps({ imageList: { type: Array as PropType<ImageListType>, required: true } })
 
 interface Option {
   value: number,
@@ -143,23 +144,23 @@ const selectImageBed = (tag: Tag) => {
     return
   }
 
-  configBedTags.value.forEach(v => {
-    if (tag.index == v.index) {
-      v.effect = 'dark'
-    } else {
-      if (v.effect === 'dark') {
-        v.effect = 'plain'
-      }
-    }
-  })
-
   chooseImageBed(tag.index, (r) => {
     if (r.success) {
+      configBedTags.value.forEach(v => {
+        if (tag.index == v.index) {
+          v.effect = 'dark'
+        } else {
+          if (v.effect === 'dark') {
+            v.effect = 'plain'
+          }
+        }
+      })
       ElMessage({
         message: '图床切换到 ' + tag.name,
         type: 'success',
         duration: MessageDuration
       })
+      props.imageList.splice(0, props.imageList.length)
     } else {
       ElMessage({
         message: r.error,

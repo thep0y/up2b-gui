@@ -88,14 +88,14 @@
         @close="removeExceedAlert"
     />
     <el-tooltip class="box-item" effect="dark" content="清空已上传图片列表" placement="left">
-        <el-button type="primary" :icon="Refresh" circle @click="clearFiles" />
+        <el-button type="primary" :icon="Remove" circle @click="clearFiles" />
     </el-tooltip>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
 import { ElMessage, UploadFile, UploadFiles } from 'element-plus'
-import { UploadFilled, Refresh, Check, ZoomIn, CopyDocument, Delete } from '@element-plus/icons-vue'
+import { UploadFilled, Remove, Check, ZoomIn, CopyDocument, Delete } from '@element-plus/icons-vue'
 import { UploadAjaxError } from 'element-plus/es/components/upload/src/ajax';
 import {
     previewInNewWindow,
@@ -181,6 +181,7 @@ const uploadedURLs = ref(([] as string[]))
 const handleSuccess = (resp: UploadResponse) => {
     if (resp.success) {
         uploadedURLs.value.push(resp.url)
+        ElMessage.success('上传成功，请手动刷新图片列表以添加刚上传的图片')
     } else {
         ElMessage({
             message: resp.image + ': ' + JSON.stringify(resp.error),
@@ -195,7 +196,6 @@ const clearFiles = () => {
 }
 
 const copyURL = (file: UploadFile) => {
-    file.status
     //@ts-ignore
     navigator.clipboard.writeText(file.response.url).then(() => {
         ElMessage.success('图片链接已复制到剪贴板')

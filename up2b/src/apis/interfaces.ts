@@ -62,3 +62,43 @@ export interface PreviewRequest {
     width: number
     height: number
 }
+
+export interface SMMSDeleteParams {
+    delete_url: string
+}
+
+export interface ImgtuDeleteParams {
+    id: string
+}
+
+export interface GitDeleteParams {
+    sha: string
+    delete_url: string
+}
+
+export interface SMMSImageListItem extends SMMSDeleteParams {
+    url: string
+    width: number
+    height: number
+}
+
+export interface ImgtuImageListItem extends ImgtuDeleteParams {
+    url: string
+    display_url: string
+    width: number
+    height: number
+}
+
+export interface GitImageListItem extends GitDeleteParams {
+    url: string
+}
+
+export type DeleteParamsType = SMMSDeleteParams | ImgtuDeleteParams | GitDeleteParams
+
+export type ImageListItemType = SMMSImageListItem | ImgtuImageListItem | GitImageListItem
+
+export type ImageListType = Array<ImageListItemType>
+
+export interface ImageListResponse extends ErrorResponse {
+    urls: ImageListType
+}
