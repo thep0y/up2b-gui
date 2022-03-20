@@ -1,8 +1,5 @@
 <template>
     <div id="image-list">
-        <!--         <div v-for="item in imageList" :key="item.url" class="block">
-            <el-image :src="item.url" fit="contain" />
-        </div>-->
         <ul class="el-upload-list el-upload-list--picture-card">
             <li
                 v-for="item in imageList"
@@ -11,33 +8,33 @@
                 tabindex="0"
             >
                 <div>
-                    <img class="el-upload-list__item-thumbnail" :src="item.url" />
+                    <el-image
+                        class="el-upload-list__item-thumbnail"
+                        fit="contain"
+                        :src="item.url"
+                        lazy
+                    />
                     <span class="el-upload-list__item-actions">
-                        <span class="el-upload-list__item-actions">
-                            <span
-                                class="el-upload-list__item-preview"
-                                @click="handlePicturePreview(item)"
-                            >
-                                <el-icon>
-                                    <zoom-in />
-                                </el-icon>
-                            </span>
-                            <span
-                                class="el-upload-list__item-delete"
-                                @click="copyURL(item)"
-                            >
-                                <el-icon>
-                                    <CopyDocument />
-                                </el-icon>
-                            </span>
-                            <span
-                                class="el-upload-list__item-delete"
-                                @click="handleRemove(item)"
-                            >
-                                <el-icon>
-                                    <Delete />
-                                </el-icon>
-                            </span>
+                        <span
+                            class="el-upload-list__item-preview"
+                            @click="handlePicturePreview(item)"
+                        >
+                            <el-icon>
+                                <zoom-in />
+                            </el-icon>
+                        </span>
+                        <span class="el-upload-list__item-delete" @click="copyURL(item)">
+                            <el-icon>
+                                <CopyDocument />
+                            </el-icon>
+                        </span>
+                        <span
+                            class="el-upload-list__item-delete"
+                            @click="handleRemove(item)"
+                        >
+                            <el-icon>
+                                <Delete />
+                            </el-icon>
                         </span>
                     </span>
                 </div>
@@ -91,7 +88,7 @@ const handlePicturePreview = (image: ImageListItemType) => {
         } else {
             ElMessage({
                 message: r.error,
-                type: 'error',
+                type: 'warning',
                 duration: MessageDuration
             })
             window.open(image.url)

@@ -133,7 +133,7 @@ const handlePictureCardPreview = (file: UploadFile) => {
         } else {
             ElMessage({
                 message: r.error,
-                type: 'error',
+                type: 'warning',
                 duration: MessageDuration
             })
             window.open(resp.url)
