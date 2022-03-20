@@ -4,7 +4,7 @@
 # @Email:     thepoy@163.com
 # @File Name: main.py
 # @Created:   2021-02-19 16:43:08
-# @Modified:  2022-03-20 22:54:24
+# @Modified:  2022-03-20 23:06:09
 
 import os
 import sys
@@ -45,7 +45,7 @@ localization = {
     # 'linux.openFolder': u'打开文件夹',
 }
 
-min_width, min_height = 530, 720
+min_width, min_height = 530, 740
 
 debug = is_debug()
 title = f"up2b {__version__} debug" if debug else f"up2b {__version__}"
