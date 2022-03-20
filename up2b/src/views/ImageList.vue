@@ -41,7 +41,7 @@
             </li>
         </ul>
     </div>
-    <el-affix position="bottom" :offset="20">
+    <el-affix position="bottom" :offset="10">
         <el-tooltip class="box-item" effect="dark" content="刷新图片列表" placement="top">
             <el-button type="primary" circle @click="refreshImageList">
                 <el-icon>
