@@ -4,7 +4,7 @@
 # @Email:     thepoy@163.com
 # @File Name: main.py
 # @Created:   2021-02-19 16:43:08
-# @Modified:  2022-03-18 08:14:08
+# @Modified:  2022-03-20 22:53:52
 
 import os
 import sys
@@ -45,14 +45,14 @@ localization = {
     # 'linux.openFolder': u'打开文件夹',
 }
 
-min_width, min_height = 520, 777
+min_width, min_height = 530, 777
 
 debug = is_debug()
 title = f"up2b {__version__} debug" if debug else f"up2b {__version__}"
 index = "assets/index.html"
 
 if sys.platform == "win32":
-    min_width = 542
+    min_width = 530
 
 webview.create_window(
     title,

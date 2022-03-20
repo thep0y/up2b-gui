@@ -8,7 +8,7 @@ html {
 
 body {
   margin: 0;
-  height: 100%;
+  height: calc(100% - 1px);
   font-family: -apple-system, "PingFang SC", sans-serif;
 }
 

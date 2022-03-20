@@ -173,4 +173,7 @@ const refreshImageList = () => {
     box-sizing: border-box;
     padding: 0;
 }
+#image-list > ul.el-upload-list--picture-card {
+    margin: 0 0 0 8px;
+}
 </style>
