@@ -4,7 +4,7 @@
 # @Email:     thepoy@163.com
 # @File Name: __init__.py
 # @Created:   2022-03-17 11:44:25
-# @Modified:  2022-03-21 13:08:35
+# @Modified:  2022-03-21 13:26:28
 
 import time
 
@@ -71,7 +71,7 @@ async def upload():
     assert file.filename is not None
 
     if not api.image_bed:
-        return jsonify(success=False, error="没有配置正在使用的图床")
+        return jsonify(success=False, error="尚未配置或选择图床"), 401
 
     if isinstance(api.image_bed, Github):
         time.sleep(1)

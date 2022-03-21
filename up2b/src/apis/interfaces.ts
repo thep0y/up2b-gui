@@ -12,6 +12,11 @@ export interface CommonResponse {
     error: string
 }
 
+export interface ACResponse extends CommonResponse {
+    success: boolean,
+    status: boolean
+}
+
 export interface UploadResponse {
     success: boolean
     error: string | Object

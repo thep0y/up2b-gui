@@ -6,7 +6,8 @@ import type {
     InitGitImageBedParams,
     PreviewRequest,
     ImageListResponse,
-    DeleteParamsType
+    DeleteParamsType,
+    ACResponse
 } from './interfaces'
 
 type Method = 'GET' | 'POST'
@@ -41,9 +42,9 @@ export function chooseImageBed(imageBedCode: number, callback: (r: CommonRespons
     })
 }
 
-export function toggleAutomaticCompression(ok: number, callback: (r: CommonResponse) => void) {
+export function toggleAutomaticCompression(ok: number, callback: (r: ACResponse) => void) {
     request('/ac/' + ok, 'GET').then(r => {
-        const resp: CommonResponse = r.data
+        const resp: ACResponse = r.data
         callback(resp)
     })
 }

@@ -130,15 +130,20 @@ if (import.meta.env.DEV) {
 
 const toggleAC = function (val: any): any {
   toggleAutomaticCompression(val ? 1 : 0, (r) => {
-    automaticCompression.value = r.success
     if (r.success) {
-      ElMessage.warning('图片自动压缩功能尚不完善，如遇异常请关闭此功能')
+      automaticCompression.value = r.status
+      if (r.status) {
+        ElMessage.warning('图片自动压缩功能尚不完善，如遇异常请关闭此功能')
+      } else {
+        ElMessage({
+          message: '已关闭图片自动压缩',
+          type: 'success',
+          duration: MessageDuration
+        })
+      }
     } else {
-      ElMessage({
-        message: '已关闭图片自动压缩',
-        type: 'success',
-        duration: MessageDuration
-      })
+      automaticCompression.value = false
+      ElMessage.error(r.error)
     }
   })
 }

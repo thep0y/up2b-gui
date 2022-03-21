@@ -4,7 +4,7 @@
 # @Email:     thepoy@163.com
 # @File Name: apis.py
 # @Created:   2022-03-17 12:57:02
-# @Modified:  2022-03-21 13:13:53
+# @Modified:  2022-03-21 13:33:05
 
 import os
 import webview
@@ -141,9 +141,12 @@ class Api:
         return response
 
     def toggle_automatic_compression(self, ac: bool):
-        # TODO: 因为自动压缩功能不完善，所以默认是关闭的，每次启动程序都需要手动开启
+        # 因为自动压缩功能不完善，所以默认是关闭的，每次启动程序都需要手动开启
+        if self.image_bed_code == -1:
+            return {"success": False, "error": "尚未配置或选择图床"}
+
         self.auto_compress = ac
-        response = {"success": ac}
+        response = {"success": True, "status": ac}
         return response
 
     def automatic_compression_status(self):

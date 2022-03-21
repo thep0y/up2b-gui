@@ -167,11 +167,19 @@ const handleError = (error: Error) => {
     if ((resp.error as ErrorObject).status_code == 409) {
         ElMessage.error('上传太频繁，触发服务器并发限制，请稍后重新上传失败的图片')
     } else {
-        ElMessage({
-            message: (resp.error as ErrorObject).image_path + ': ' + (resp.error as ErrorObject).status_code + ',   ' + (resp.error as ErrorObject).error,
-            type: 'error',
-            duration: MessageDuration
-        })
+        if (typeof resp.error === 'string') {
+            ElMessage({
+                message: resp.error,
+                type: 'error',
+                duration: MessageDuration
+            })
+        } else {
+            ElMessage({
+                message: (resp.error as ErrorObject).image_path + ': ' + (resp.error as ErrorObject).status_code + ',   ' + (resp.error as ErrorObject).error,
+                type: 'error',
+                duration: MessageDuration
+            })
+        }
     }
 }
 
