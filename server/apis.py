@@ -4,7 +4,7 @@
 # @Email:     thepoy@163.com
 # @File Name: apis.py
 # @Created:   2022-03-17 12:57:02
-# @Modified:  2022-03-21 12:33:07
+# @Modified:  2022-03-21 13:07:36
 
 import os
 import webview
@@ -17,7 +17,6 @@ from up2b.up2b_lib.up2b_api.imgtu import Imgtu
 from up2b.up2b_lib.up2b_api.gitee import Gitee
 from up2b.up2b_lib.up2b_api.github import Github
 from up2b.up2b_lib.constants import (
-    IMAGE_BEDS_CODE,
     SM_MS,
     IMGTU,
     GITEE,
@@ -131,6 +130,7 @@ class Api:
         urls = []
         if image_paths:
             try:
+                assert self.image_bed is not None
                 urls = self.image_bed.upload_images(image_paths)
             except OverSizeError as e:
                 return {"success": False, "error": f"图片超限了 - {e}"}

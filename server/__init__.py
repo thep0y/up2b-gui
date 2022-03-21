@@ -4,7 +4,7 @@
 # @Email:     thepoy@163.com
 # @File Name: __init__.py
 # @Created:   2022-03-17 11:44:25
-# @Modified:  2022-03-21 11:46:08
+# @Modified:  2022-03-21 13:08:35
 
 import time
 
@@ -49,7 +49,11 @@ async def choose_image_bed(code: int):
 @app.route("/init", methods=[POST])
 async def init_image_bed():
     data = request.get_json()
-    return jsonify(api.init_image_bed(data))
+    result = api.init_image_bed(data)
+    if not result["success"]:
+        api.image_bed_code = -1
+
+    return jsonify(result)
 
 
 @app.route("/ac/<int:status>", methods=[GET])
