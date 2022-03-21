@@ -42,7 +42,7 @@ SetCompressorDictSize 32
 
 Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
 OutFile "dist\up2b-installer.exe"
-InstallDir "$APPDATA\Local\Programs\up2b"
+InstallDir "$LOCALAPPDATA\Programs\up2b"
 InstallDirRegKey HKLM "${PRODUCT_DIR_REGKEY}" ""
 ShowInstDetails show
 ShowUnInstDetails show
