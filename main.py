@@ -4,7 +4,7 @@
 # @Email:     thepoy@163.com
 # @File Name: main.py
 # @Created:   2021-02-19 16:43:08
-# @Modified:  2022-03-20 23:07:20
+# @Modified:  2022-03-21 09:20:14
 
 import os
 import sys
@@ -45,14 +45,15 @@ localization = {
     # 'linux.openFolder': u'打开文件夹',
 }
 
-min_width, min_height = 530, 740
+min_width, min_height = 548, 740
 
 debug = is_debug()
 title = f"up2b {__version__} debug" if debug else f"up2b {__version__}"
 index = "assets/index.html"
 
 if sys.platform == "win32":
-    min_width = 530
+    # windows 的宽最少是 548 时才能保证一行能容纳三张缩略图
+    min_width = 548
 
 webview.create_window(
     title,
