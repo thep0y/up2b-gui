@@ -30,7 +30,7 @@ VSVersionInfo(
       StringTable(
         '080404b0',
         [StringStruct('CompanyName', 'thep0y'),
-        StringStruct('FileDescription', 'UP2B'),
+        StringStruct('FileDescription', '图床管理工具'),
         StringStruct('FileVersion', '0.1.0.0'),
         StringStruct('LegalCopyright', 'Copyright (C) 2022 thep0y'),
         StringStruct('ProductName', 'UP2B'),
