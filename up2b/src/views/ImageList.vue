@@ -175,5 +175,6 @@ const refreshImageList = () => {
 }
 #image-list > ul.el-upload-list--picture-card {
     margin: 0 0 0 8px;
+    display: block;
 }
 </style>
