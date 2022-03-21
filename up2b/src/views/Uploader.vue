@@ -93,16 +93,14 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, PropType } from 'vue'
 import { ElMessage, UploadFile, UploadFiles } from 'element-plus'
 import { UploadFilled, Remove, Check, ZoomIn, CopyDocument, Delete } from '@element-plus/icons-vue'
 import { UploadAjaxError } from 'element-plus/es/components/upload/src/ajax';
-import {
-    previewInNewWindow,
-    MessageDuration,
-    UploadResponse,
-    ErrorResponse
-} from '../apis';
+import type { UploadResponse, ErrorResponse, ImageListType } from '../apis';
+import { previewInNewWindow, getAllImages, MessageDuration } from '../apis';
+
+const props = defineProps({ imageList: { type: Array as PropType<ImageListType>, required: true } })
 
 const action = import.meta.env.VITE_APP_BASE_API + '/upload'
 
@@ -111,6 +109,7 @@ const disabled = ref(false)
 
 const handleRemove = (file: UploadFile) => {
     upload.value.handleRemove(file)
+    ElMessage.warning('已在上传列表中移除，若想在图床中删除此图片请到图片列表页面操作')
 }
 
 const handlePictureCardPreview = (file: UploadFile) => {
@@ -181,7 +180,6 @@ const uploadedURLs = ref(([] as string[]))
 const handleSuccess = (resp: UploadResponse) => {
     if (resp.success) {
         uploadedURLs.value.push(resp.url)
-        ElMessage.success('上传成功，请手动刷新图片列表以添加刚上传的图片')
     } else {
         ElMessage({
             message: resp.image + ': ' + JSON.stringify(resp.error),
@@ -189,6 +187,27 @@ const handleSuccess = (resp: UploadResponse) => {
             duration: MessageDuration
         })
     }
+
+    getAllImages((r) => {
+        if (r.success) {
+            let map: { [key: string]: boolean } = {}
+            props.imageList.forEach(v => {
+                map[v.url] = true
+            })
+
+            r.urls.forEach(v => {
+                if (!map[v.url]) {
+                    props.imageList.push(v)
+                }
+            })
+
+            ElMessage({
+                message: '已将上传成功的图片添加到图片列表',
+                type: 'info',
+                duration: MessageDuration
+            })
+        }
+    })
 }
 
 const clearFiles = () => {

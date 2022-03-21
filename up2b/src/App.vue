@@ -9,7 +9,7 @@
           <span>上传图片</span>
         </span>
       </template>
-      <uploader />
+      <uploader :image-list="imageListRef" />
     </el-tab-pane>
     <el-tab-pane lazy>
       <template #label>
