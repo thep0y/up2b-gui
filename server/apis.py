@@ -4,12 +4,12 @@
 # @Email:     thepoy@163.com
 # @File Name: apis.py
 # @Created:   2022-03-17 12:57:02
-# @Modified:  2022-03-20 21:47:22
+# @Modified:  2022-03-21 12:33:07
 
 import os
 import webview
 
-from typing import Dict, List, Union
+from typing import Dict, List, Optional, Union
 from up2b import IMAGE_BEDS
 from up2b.up2b_lib.up2b_api import CONF_FILE, GitBase, choose_image_bed
 from up2b.up2b_lib.up2b_api.sm import SM
@@ -48,28 +48,26 @@ class Api:
         selected = self.conf.get("image_bed", -1)
 
         assert isinstance(selected, int)
-        assert selected >= 0
 
         self.image_bed_code = selected
 
     @property
-    def image_bed(self) -> Union[SM, Imgtu, Gitee, Github]:
+    def image_bed(self) -> Optional[Union[SM, Imgtu, Gitee, Github]]:
+        if self.image_bed_code == -1:
+            return None
+
         image_bed = IMAGE_BEDS[self.image_bed_code]()
         image_bed.auto_compress = self.auto_compress
         return image_bed
 
     def show_image_beds(self):
-        auth_data = self.conf.get("auth_data", None)
-        if auth_data:
-            assert isinstance(auth_data, list)
-
-            for i in range(len(auth_data)):
-                auth_data[i]["type"] = IMAGE_BEDS[i]().image_bed_type.value
+        auth_data = self.conf.get("auth_data", [])
+        assert isinstance(auth_data, list)
 
         response = {
-            "selected": self.image_bed.image_bed_code,
-            "beds": IMAGE_BEDS_CODE,
-            "auth_data": auth_data,
+            "selected": self.image_bed.image_bed_code if self.image_bed else None,
+            "save_beds": [i for i in range(len(auth_data)) if auth_data[i]],
+            "types": [i().image_bed_type.value for i in IMAGE_BEDS.values()],
             "screensize": {"height": self.height, "width": self.width},
         }
         return response
@@ -83,16 +81,20 @@ class Api:
 
         # TODO: 判断条件需要修改为根据图床类型执行
         if self.image_bed_code == SM_MS:
+            assert isinstance(self.image_bed, SM)
             if not self.image_bed.login(info["username"], info["password"]):  # type: ignore
                 return {"success": False, "error": "用户名或密码错误"}
         elif self.image_bed_code == IMGTU:
+            assert isinstance(self.image_bed, Imgtu)
             if not self.image_bed.login(info["username"], info["password"]):  # type: ignore
                 return {"success": False, "error": "用户名或密码错误"}
         elif self.image_bed_code == GITEE:
+            assert isinstance(self.image_bed, GitBase)
             self.image_bed.login(
                 info["token"], info["username"], info["repo"], info["folder"]  # type: ignore
             )
         elif self.image_bed_code == GITHUB:
+            assert isinstance(self.image_bed, GitBase)
             self.image_bed.login(
                 info["token"], info["username"], info["repo"], info["folder"]  # type: ignore
             )

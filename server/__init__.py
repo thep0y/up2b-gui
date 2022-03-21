@@ -4,7 +4,7 @@
 # @Email:     thepoy@163.com
 # @File Name: __init__.py
 # @Created:   2022-03-17 11:44:25
-# @Modified:  2022-03-20 23:02:50
+# @Modified:  2022-03-21 11:46:08
 
 import time
 
@@ -60,14 +60,14 @@ async def toggle_automatic_compression(status: int):
 @app.route("/upload", methods=[POST])
 async def upload():
     if "file" not in request.files:
-        return jsonify(success=False), 400
+        return jsonify(success=False)
 
     file = request.files["file"]
 
     assert file.filename is not None
 
     if not api.image_bed:
-        return jsonify(success=False, error="没有配置正在使用的图床"), 403
+        return jsonify(success=False, error="没有配置正在使用的图床")
 
     if isinstance(api.image_bed, Github):
         time.sleep(1)
@@ -81,7 +81,7 @@ async def upload():
     )
 
     if isinstance(result, str):
-        return jsonify(success=True, url=result), 200
+        return jsonify(success=True, url=result)
 
     return jsonify(success=False, error=result.to_dict()), result.status_code
 
@@ -90,12 +90,12 @@ async def upload():
 async def get_all_images():
     images = api.get_all_images()
     if images is None:
-        return jsonify(success=False, error="尚未选择图床"), 400
+        return jsonify(success=False, error="尚未配置或选择图床")
 
     if isinstance(images, ErrorResponse):
-        return jsonify(success=False, error=images.to_dict()), 400
+        return jsonify(success=False, error=images.to_dict())
 
-    return jsonify(success=True, image_code=api.image_bed_code, urls=images), 200
+    return jsonify(success=True, image_code=api.image_bed_code, urls=images)
 
 
 @app.route("/preview", methods=[POST])
@@ -106,9 +106,9 @@ async def preview():
 
     if app.config["ENV"] != "development":
         api.view_image_in_new_windows(data["url"], data["width"], data["height"])
-        return jsonify(success=True), 200
+        return jsonify(success=True)
 
-    return jsonify(success=False, error="当前为开发环境，无法打开新窗口，用打开一个新的浏览器标签页替代"), 200
+    return jsonify(success=False, error="当前为开发环境，无法打开新窗口，用打开一个新的浏览器标签页替代")
 
 
 @app.route("/delete", methods=[POST])

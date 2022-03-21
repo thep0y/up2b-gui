@@ -1,11 +1,8 @@
-export interface AuthDataItem {
-    // 响应字段不是只有 type，只是响应里直接用到的共同字段只有 type
-    type: number
-}
+export type ImageBedType = 1 | 2
 
 export interface ImageBedsResponse {
-    auth_data: Array<AuthDataItem>,
-    beds: { [key: string]: number },
+    types: Array<ImageBedType>,
+    save_beds: Array<number>,
     selected: number,
     screensize: { height: number, width: number }
 }
@@ -27,13 +24,16 @@ export interface CommonConfig {
     password: string
 }
 
+export interface ErrorObject {
+    error: string
+    image_path: string
+    status_code: number
+
+}
+
 export interface ErrorResponse {
     success: boolean
-    error: {
-        error: string
-        image_path: string
-        status_code: number
-    }
+    error: string | ErrorObject
 }
 
 export interface GitConfig {

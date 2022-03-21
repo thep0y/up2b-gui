@@ -6,7 +6,7 @@
     <div class="el-input-group__prepend">选择图床</div>
     <el-select
       v-model="selectedCode"
-      placeholder="Select"
+      placeholder="请选择要使用的图床"
       size="large"
       style="display: block;"
     >
@@ -77,7 +77,7 @@ import {
   ImageCodes,
   MessageDuration
 } from '../apis'
-import type { ImageListType, ImageBedsResponse, Tag } from '../apis'
+import type { ImageBedType, ImageListType, ImageBedsResponse, Tag } from '../apis'
 import { switchAndClear } from '../components/settings'
 import CommonConfig from '../components/settings/CommonConfig.vue'
 import GitConfig from '../components/settings/GitConfig.vue'
@@ -89,32 +89,34 @@ interface Option {
   label: string
 }
 
-let imageBedTypes: number[] = []
+let imageBedTypes: ImageBedType[] = []
 
 const selectedCode = ref(-1)
 
 const options = ref(([] as Option[]))
+ImageCodes.forEach((v, i) => {
+  options.value.push({
+    value: i,
+    label: v
+  })
+})
+
 const configBedTags = ref(([] as Tag[]))
 const automaticCompression = ref(false)
 
 const update = (resp: ImageBedsResponse) => {
   selectedCode.value = resp.selected
-  for (let key in resp.beds) {
-    options.value.push({
-      value: resp.beds[key],
-      label: key
-    })
-  }
-  resp.auth_data.forEach((v, i) => {
-    if (Object.keys(v).length > 0) {
-      imageBedTypes.push(v.type)
 
-      configBedTags.value.push({
-        index: i,
-        name: ImageCodes[i],
-        effect: selectedCode.value === i ? 'dark' : 'plain'
-      })
-    }
+  resp.types.forEach(v => {
+    imageBedTypes.push(v)
+  })
+
+  resp.save_beds.forEach(v => {
+    configBedTags.value.push({
+      index: v,
+      name: ImageCodes[v],
+      effect: selectedCode.value === v ? 'dark' : 'plain'
+    })
   })
 }
 

@@ -79,7 +79,7 @@ const getAllImagesEvent = (pane: TabsPaneContext) => {
       if (r.success) {
         imageListRef.value = r.urls
       } else {
-        ElMessage.error(r.error.error.toString())
+        ElMessage.error((r.error as string))
       }
     })
   }
@@ -89,7 +89,6 @@ const getAllImagesEvent = (pane: TabsPaneContext) => {
 
 <style>
 #app {
-  font-family: -apple-system, "PingFang SC", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;

@@ -56,7 +56,7 @@
 import { PropType } from 'vue'
 import { ElMessage, ElLoading } from 'element-plus'
 import { ZoomIn, CopyDocument, Delete, Refresh } from '@element-plus/icons-vue'
-import type { ImageListType, ImageListItemType, DeleteParamsType } from '../apis'
+import type { ImageListType, ImageListItemType, DeleteParamsType, ErrorObject } from '../apis'
 import { previewInNewWindow, deleteImage, MessageDuration, getAllImages } from '../apis';
 
 const props = defineProps({ imageList: { type: Array as PropType<ImageListType>, required: true } })
@@ -134,7 +134,7 @@ const handleRemove = (image: ImageListItemType) => {
             props.imageList.splice(props.imageList.indexOf(image), 1)
             ElMessage.success('已删除')
         } else {
-            ElMessage.error(`删除失败：status_code=${r.error.status_code}, error=${r.error.error}`)
+            ElMessage.error(`删除失败：status_code=${(r.error as ErrorObject).status_code}, error=${(r.error as ErrorObject).error}`)
         }
     })
 }
@@ -155,7 +155,7 @@ const refreshImageList = () => {
                 props.imageList.push(v)
             })
         } else {
-            ElMessage.error(r.error.error.toString())
+            ElMessage.error((r.error as ErrorObject).error)
         }
     })
 }

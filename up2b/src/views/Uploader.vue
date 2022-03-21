@@ -97,7 +97,7 @@ import { ref, PropType } from 'vue'
 import { ElMessage, UploadFile, UploadFiles } from 'element-plus'
 import { UploadFilled, Remove, Check, ZoomIn, CopyDocument, Delete } from '@element-plus/icons-vue'
 import { UploadAjaxError } from 'element-plus/es/components/upload/src/ajax';
-import type { UploadResponse, ErrorResponse, ImageListType } from '../apis';
+import type { UploadResponse, ErrorResponse, ImageListType, ErrorObject } from '../apis';
 import { previewInNewWindow, getAllImages, MessageDuration } from '../apis';
 
 const props = defineProps({ imageList: { type: Array as PropType<ImageListType>, required: true } })
@@ -164,11 +164,11 @@ const removeExceedAlert = () => {
 // 上传错误
 const handleError = (error: Error) => {
     const resp: ErrorResponse = JSON.parse((error as UploadAjaxError).message)
-    if (resp.error.status_code == 409) {
+    if ((resp.error as ErrorObject).status_code == 409) {
         ElMessage.error('上传太频繁，触发服务器并发限制，请稍后重新上传失败的图片')
     } else {
         ElMessage({
-            message: resp.error.image_path + ': ' + resp.error.status_code + ',   ' + resp.error.error,
+            message: (resp.error as ErrorObject).image_path + ': ' + (resp.error as ErrorObject).status_code + ',   ' + (resp.error as ErrorObject).error,
             type: 'error',
             duration: MessageDuration
         })

@@ -14,8 +14,8 @@ export const addTag = (tags: Tag[], imageCode: number) => {
         }
     }
 
-    if (!exits && darkIdx >= 0) {
-        (tags[darkIdx] as Tag).effect = 'plain';
+    if (tags.length == 0 || (!exits && darkIdx >= 0)) {
+        if (!exits && darkIdx >= 0) (tags[darkIdx] as Tag).effect = 'plain';
         (tags as Tag[]).push({
             index: imageCode,
             name: ImageCodes[imageCode],
