@@ -6,7 +6,7 @@
 
 正在重构的动图演示：
 
-![output](https://s2.loli.net/2022/03/19/yUT3QZ9FND5kVfX.png)
+<video src="https://raw.githubusercontent.com/thep0y/up2b-gui/main/multimedia-files/demo.mov"></video>
 
 ## 特点
 
