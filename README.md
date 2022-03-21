@@ -88,13 +88,13 @@ pip install -r requirements.txt
 打包为一个exe：
 
 ```po
-pyinstaller -windowed -F -y --collect-binaries clr_loader --clean -i ./assets/favicon.ico -n Up2b --add-data "assets;assets" main.py
+pyinstaller -windowed -F -y -n up2b --version-file version --collect-binaries clr_loader --clean -i ./assets/favicon.ico --add-data "assets;assets" main.py
 ```
 
 打包为一个目录：
 
 ```powershell
-pyinstaller -windowed -y --collect-binaries clr_loader --clean -i ./assets/favicon.ico -n Up2b --add-data "assets;assets" main.py
+pyinstaller -windowed -y -n up2b --version-file version --collect-binaries clr_loader --clean -i ./assets/favicon.ico --add-data "assets;assets" main.py
 ```
 
 ### 3 Linux安装脚本一键安装（默认使用qt）
