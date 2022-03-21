@@ -4,9 +4,9 @@
 
 基于[pywebview](https://github.com/r0x0r/pywebview)和[up2b](https://github.com/thep0y/up2b)写的图床管理软件。
 
-正在重构的动图演示：
+演示视频：
 
-<video src="https://raw.githubusercontent.com/thep0y/up2b-gui/main/multimedia-files/demo.mov"></video>
+https://user-images.githubusercontent.com/51874567/159233149-22a09854-32ab-4b59-bd9a-36d285cc4561.mov
 
 ## 特点
 
