@@ -1,0 +1,29 @@
+:root {
+  --block-bg-color: rgba(0, 128, 0, 0.1);
+  --font-family: -apple-system, "PingFang SC", sans-serif;
+}
+
+html {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  height: calc(100% - 1px);
+  font-family: var(--font-family);
+}
+
+a {
+  color: var(--el-color-primary);
+}
+
+code {
+  border-radius: 2px;
+  padding: 2px 4px;
+  background-color: var(--el-color-primary-light-9);
+  color: var(--el-color-primary);
+}
+
+input::placeholder {
+  font-family: var(--font-family);
+}

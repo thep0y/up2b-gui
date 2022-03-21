@@ -4,7 +4,9 @@
 
 基于[pywebview](https://github.com/r0x0r/pywebview)和[up2b](https://github.com/thep0y/up2b)写的图床管理软件。
 
-![示意动图](https://cdn.jsdelivr.net/gh/thep0y/image-bed/md/1627305852264243.png)
+正在重构的动图演示：
+
+![output](https://s2.loli.net/2022/03/19/yUT3QZ9FND5kVfX.png)
 
 ## 特点
 
@@ -34,6 +36,25 @@
   - 仅对jpg和png格式的图片有效
   - 此功能不实用，不建议开启
 
+## 开发调试
+
+重构后增加开发模式，可以实现前后端分离分别运行开发而互不影响。
+
+前端运行：
+
+```bash
+cd up2b
+yarn dev
+```
+
+后端运行：
+
+```bash
+python -m server
+```
+
+前后端在开发模式中都支持热重载（热更新），方便开发调试。
+
 ## 安装
 
 ### 1 源码安装
@@ -61,6 +82,20 @@ pip install -r requirements.txt
 ### 2 二进制文件
 
 仅限windows10系统，在release里下载最新版即可。
+
+#### 或自行打包
+
+打包为一个exe：
+
+```po
+pyinstaller -windowed -F -y -n up2b --version-file version --collect-binaries clr_loader --clean -i ./assets/favicon.ico --add-data "assets;assets" main.py
+```
+
+打包为一个目录：
+
+```powershell
+pyinstaller -windowed -y -n up2b --version-file version --collect-binaries clr_loader --clean -i ./assets/favicon.ico --add-data "assets;assets" main.py
+```
 
 ### 3 Linux安装脚本一键安装（默认使用qt）
 

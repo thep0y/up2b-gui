@@ -1,0 +1,33 @@
+{
+  "name": "up2b",
+  "private": true,
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc --noEmit && vite build --emptyOutDir",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "axios": "^0.26.1",
+    "element-plus": "^2.1.4",
+    "vue": "^3.2.31",
+    "vue-router": "^4.0.14"
+  },
+  "devDependencies": {
+    "@types/node": "",
+    "@typescript-eslint/eslint-plugin": "",
+    "@typescript-eslint/parser": "",
+    "@vitejs/plugin-vue": "^2.2.4",
+    "@vue/compiler-sfc": "^3.2.31",
+    "eslint": "",
+    "eslint-plugin": "",
+    "eslint-plugin-eslint-plugin": "",
+    "eslint-plugin-vue": "^8.5.0",
+    "sass": "",
+    "typescript": "^4.6.2",
+    "unplugin-auto-import": "^0.6.4",
+    "unplugin-vue-components": "^0.18.0",
+    "vite": "^2.8.6",
+    "vue-tsc": "^0.32.1"
+  }
+}

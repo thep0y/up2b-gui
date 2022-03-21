@@ -1,0 +1,68 @@
+{
+    // "parser": "@typescript-eslint/parser",
+    "parser": "vue-eslint-parser",
+    "parserOptions": {
+        "parser": "@typescript-eslint/parser",
+        "project": [
+            "tsconfig.json"
+        ],
+        "extraFileExtensions": [
+            "vue"
+        ]
+    },
+    "extends": [
+        "plugin:vue/vue3-recommended"
+        // "eslint:recommended",
+        // "plugin:@typescript-eslint/recommended",
+        // "plugin:@typescript-eslint/recommended-requiring-type-checking"
+    ],
+    "plugins": [
+        "eslint-plugin",
+        "@typescript-eslint"
+    ],
+    "rules": {
+        "@typescript-eslint/no-unused-vars": [
+            "error"
+        ],
+        "quotes": [
+            "error",
+            "single"
+        ],
+        "comma-dangle": [
+            "error",
+            "never"
+        ],
+        "no-multiple-empty-lines": [
+            "error",
+            {
+                "max": 1,
+                "maxEOF": 0,
+                "maxBOF": 0
+            }
+        ],
+        "array-element-newline": [
+            "error",
+            {
+                "multiline": true,
+                "minItems": 3
+            }
+        ],
+        "array-bracket-newline": [
+            "error",
+            {
+                "multiline": true,
+                "minItems": 3
+            }
+        ],
+        "@typescript-eslint/no-non-null-assertion": "off",
+        "no-trailing-spaces": "error",
+        // vue
+        "vue/singleline-html-element-content-newline": "off",
+        "vue/max-attributes-per-line": "off",
+        "vue/no-mutating-props": "off",
+        "vue/require-prop-types": "off",
+        "vue/multiline-html-element-content-newline": "off",
+        "vue/html-self-closing": "off",
+        "vue/html-indent": "off"
+    }
+}
