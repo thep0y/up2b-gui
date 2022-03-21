@@ -56,8 +56,8 @@
 import { PropType } from 'vue'
 import { ElMessage, ElLoading } from 'element-plus'
 import { ZoomIn, CopyDocument, Delete, Refresh } from '@element-plus/icons-vue'
-import { ImageListType, ImageListItemType, deleteImage, DeleteParamsType } from '../apis'
-import { previewInNewWindow, MessageDuration, getAllImages } from '../apis';
+import type { ImageListType, ImageListItemType, DeleteParamsType } from '../apis'
+import { previewInNewWindow, deleteImage, MessageDuration, getAllImages } from '../apis';
 
 const props = defineProps({ imageList: { type: Array as PropType<ImageListType>, required: true } })
 

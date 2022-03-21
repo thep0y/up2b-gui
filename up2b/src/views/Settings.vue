@@ -20,10 +20,14 @@
   </div>
   <el-divider content-position="center">配置</el-divider>
   <div v-if="imageBedTypes[selectedCode] === 1" id="settings-config">
-    <common-config :image-code="selectedCode" :tags="configBedTags" />
+    <common-config
+      :image-list="imageList"
+      :image-code="selectedCode"
+      :tags="configBedTags"
+    />
   </div>
   <div v-if="imageBedTypes[selectedCode] === 2" id="settings-config">
-    <git-config :image-code="selectedCode" :tags="configBedTags" />
+    <git-config :image-list="imageList" :image-code="selectedCode" :tags="configBedTags" />
   </div>
   <div class="tip custom-block">
     <ul>
@@ -74,6 +78,7 @@ import {
   MessageDuration
 } from '../apis'
 import type { ImageListType, ImageBedsResponse, Tag } from '../apis'
+import { switchAndClear } from '../components/settings'
 import CommonConfig from '../components/settings/CommonConfig.vue'
 import GitConfig from '../components/settings/GitConfig.vue'
 
@@ -146,21 +151,13 @@ const selectImageBed = (tag: Tag) => {
 
   chooseImageBed(tag.index, (r) => {
     if (r.success) {
-      configBedTags.value.forEach(v => {
-        if (tag.index == v.index) {
-          v.effect = 'dark'
-        } else {
-          if (v.effect === 'dark') {
-            v.effect = 'plain'
-          }
-        }
-      })
       ElMessage({
         message: '图床切换到 ' + tag.name,
         type: 'success',
         duration: MessageDuration
       })
-      props.imageList.splice(0, props.imageList.length)
+
+      switchAndClear(configBedTags.value, tag.index, props.imageList)
     } else {
       ElMessage({
         message: r.error,

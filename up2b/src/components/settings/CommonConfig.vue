@@ -30,14 +30,18 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import { ElMessage, FormInstance } from 'element-plus'
-import { CommonConfig as CommonForm, InitCommonImageBedParams, Tag } from '../../apis/interfaces'
-import { initImageBeds } from '../../apis'
-import { ImageCodes } from '../../apis/consts'
-import { addTag, switchTag } from './common'
+import { ref, PropType } from 'vue';
+import { FormInstance, ElMessage } from 'element-plus'
+import type {
+    ImageListType,
+    CommonConfig as CommonForm,
+    InitCommonImageBedParams,
+    Tag
+} from '../../apis'
+import { initImageBeds, ImageCodes } from '../../apis'
+import { addAndSwitchAndClear } from './settings'
 
-const props = defineProps({ imageCode: { type: Number, required: true }, tags: { type: Array, required: true } })
+const props = defineProps({ imageList: { type: Array as PropType<ImageListType>, required: true }, imageCode: { type: Number, required: true }, tags: { type: Array, required: true } })
 
 const commonFormRef = ref<FormInstance>()
 const commonForm = ref(({} as CommonForm))
@@ -71,12 +75,9 @@ const submitForm = (formEl: FormInstance | undefined) => {
                     })
                     formEl.resetFields()
 
-                    // TODO: 配置保存后清空图片列表
-
-                    addTag(props.tags as Tag[], props.imageCode)
-                    switchTag(props.tags as Tag[], props.imageCode)
+                    addAndSwitchAndClear(props.tags as Tag[], props.imageCode, props.imageList)
                 } else {
-                    ElMessage.error(r.error)
+                    ElMessage.error(`配置保存失败：${r.error}`)
                 }
             })
         } else {
