@@ -40,14 +40,14 @@ https://user-images.githubusercontent.com/51874567/159233149-22a09854-32ab-4b59-
 
 重构后增加开发模式，可以实现前后端分离分别运行开发而互不影响。
 
-前端运行：
+前端运行开发服务器：
 
 ```bash
 cd up2b
 yarn dev
 ```
 
-后端运行：
+后端运行开发服务器：
 
 ```bash
 python -m server
@@ -57,33 +57,17 @@ python -m server
 
 ## 安装
 
-### 1 源码安装
+### 二进制文件
 
-将项目克隆到本地：
+支持 windows、macOS、debian系发行版，在 release 里下载[最新版](https://github.com/thep0y/up2b-gui/releases/latest)即可。
 
-```shell
-git clone https://github.com/thep0y/up2b-gui.git
-```
+linux第一次启动时由于需要安装一些依赖会比较慢，耐心等待软件界面弹出，之后就可以即时启动。
 
-进入项目根目录后，安装所需依赖：
+### 或自行打包
 
-```shell
-pip install -r requirements.txt
-```
+手动打包需要先编译静态文件（前端），前端的目录是本项目中的`up2b`目录，可根据里面的 REAME 测试或编译。
 
-仅在`Windows 10`和`ArchLinux(KDE)`上测试。
-
-**windows 上使用 Python3.9 时需注意**
-
-截止目前(2021.02.26)，pythonnet 的支持 3.9 的 wheel 并未上传到 pypi，所以需要手动下载安装。
-
-[Python Extension Packages for Windows - Christoph Gohlke (uci.edu)](https://www.lfd.uci.edu/~gohlke/pythonlibs/#pythonnet)
-
-### 2 二进制文件
-
-仅限 windows10 系统，在 release 里下载最新版即可。
-
-#### 或自行打包
+以 windows 为例。
 
 打包为一个 exe：
 
@@ -97,28 +81,12 @@ pyinstaller -windowed -F -y -n up2b --version-file version --collect-binaries cl
 pyinstaller -windowed -y -n up2b --version-file version --collect-binaries clr_loader --clean -i ./assets/favicon.ico --add-data "assets;assets" main.py
 ```
 
-### 3 Linux 安装脚本一键安装（默认使用 qt）
-
-```sh
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/thep0y/up2b-gui/main/install.sh)"
-```
-
-## 使用
+## 试用
 
 本项目提供路过图床(imgtu.com)的测试账号用于体验，用户名和密码皆为`timg_test`，请勿将测试账号用于非法用途。
-
-进入项目根目录，执行：
-
-```shell
-python main.py
-```
 
 此时就可以上传图片、查看图片和管理图片了。
 
 当然，第一次使用需要在配置图床，**配置**或**修改**后的图床会被设置为当前正在使用的图床。
 
-图片上传成功后，记得点击椭圆形的图床按钮刷新才能在`所有图片`里加载（未来会改为上传成功后即添加到`所有图片`里）
-
-## 附言
-
-因为依赖`up2b`，所以也就可以根据[up2b](https://github.com/thep0y/up2b)的 README 在`Typora`中使用。
+图片上传成功后，自动在`图片列表`里加载。
