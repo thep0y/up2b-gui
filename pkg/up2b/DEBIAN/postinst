@@ -1,9 +1,0 @@
-#!/bin/sh
-
-install_dir=/opt/up2b
-/usr/bin/python3 -m venv $install_dir/venv
-cd $install_dir
-source venv/bin/activate
-# 不升级 pip 无法安装 pyqt5
-./venv/bin/python -m pip install pip --upgrade -i https://mirrors.bfsu.edu.cn/pypi/web/simple
-./venv/bin/python -m pip install 'pywebview[qt]' up2b 'flask[async]' -i https://mirrors.bfsu.edu.cn/pypi/web/simple
