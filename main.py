@@ -4,7 +4,7 @@
 # @Email:     thepoy@163.com
 # @File Name: main.py
 # @Created:   2021-02-19 16:43:08
-# @Modified:  2022-03-21 11:19:05
+# @Modified:  2022-03-22 16:56:49
 
 import os
 import sys
@@ -15,10 +15,24 @@ from up2b.up2b_lib.utils import logger, is_debug
 from server import app
 from server.apis import Api
 
+
+def get_distro() -> str:
+    with open("/etc/os-version") as f:
+        lines = f.readlines()
+        lines = lines[1:]
+        for line in lines:
+            temp = line[:-1].split("=")
+            if temp[0] == "SystemName":
+                return temp[1]
+    return ""
+
+
 if sys.platform == "linux":
-    if "Ubuntu" not in platform.version():
-        # os.environ["QT_AUTO_SCREEN_SCALE_FACTOR"] = "1"  # 自动配置缩放，可能会使用不正确的缩放比例
-        os.environ["QT_SCALE_FACTOR"] = "1.5"
+    distro = get_distro()
+    if distro == "Deepin":
+        os.environ["QT_SCALE_FACTOR"] = os.environ["DEEPIN_WINE_SCALE"]
+    else:
+        os.environ["QT_AUTO_SCREEN_SCALE_FACTOR"] = "1"  # 自动配置缩放，可能会使用不正确的缩放比例
 
 __version__ = "0.1.0.0 beta"
 
@@ -68,5 +82,5 @@ with logger:
     if sys.platform == "win32":
         webview.start(debug=debug, localization=localization, gui="edgechromium")
     else:
-        # Linux发行版会根据当前系统使用的GUI套件生成窗口，不需要特别指定使用qt或gtk
-        webview.start(debug=debug, localization=localization)
+        # use qt on deepin
+        webview.start(debug=debug, localization=localization, gui="qt")

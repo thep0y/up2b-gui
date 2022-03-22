@@ -1,0 +1,10 @@
+[Desktop Entry]
+Categories=Graphics;Utility;
+Comment=简单好用的图床管理器
+Exec=/opt/up2b/run.sh
+Icon=up2b
+Name=UP2B
+Name[zh_CN]=UP2B 图床管理器
+GenericName=图床管理器
+StartupNotify=false
+Type=Application

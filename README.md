@@ -22,10 +22,10 @@ https://user-images.githubusercontent.com/51874567/159233149-22a09854-32ab-4b59-
 当前为测试版，功能有：
 
 - 上传图片
-  - 多图上传，一次最多上传10张图片
+  - 多图上传，一次最多上传 10 张图片
   - 上传成功后单击图片即可复制图片链接
 - 查看所有图片
-  - 12张图片为一组
+  - 12 张图片为一组
   - 单击图片可查看原图
     - 直接拖拽原图到本地可保存为本地图片
   - 单击复制按钮复制图片链接
@@ -33,7 +33,7 @@ https://user-images.githubusercontent.com/51874567/159233149-22a09854-32ab-4b59-
     - 批量删除功能未实现
 - 一键切换图床
 - 自动压缩图片
-  - 仅对jpg和png格式的图片有效
+  - 仅对 jpg 和 png 格式的图片有效
   - 此功能不实用，不建议开启
 
 ## 开发调试
@@ -73,19 +73,19 @@ pip install -r requirements.txt
 
 仅在`Windows 10`和`ArchLinux(KDE)`上测试。
 
-**windows上使用Python3.9时需注意**
+**windows 上使用 Python3.9 时需注意**
 
-截止目前(2021.02.26)，pythonnet的支持3.9的wheel并未上传到pypi，所以需要手动下载安装。
+截止目前(2021.02.26)，pythonnet 的支持 3.9 的 wheel 并未上传到 pypi，所以需要手动下载安装。
 
 [Python Extension Packages for Windows - Christoph Gohlke (uci.edu)](https://www.lfd.uci.edu/~gohlke/pythonlibs/#pythonnet)
 
 ### 2 二进制文件
 
-仅限windows10系统，在release里下载最新版即可。
+仅限 windows10 系统，在 release 里下载最新版即可。
 
 #### 或自行打包
 
-打包为一个exe：
+打包为一个 exe：
 
 ```po
 pyinstaller -windowed -F -y -n up2b --version-file version --collect-binaries clr_loader --clean -i ./assets/favicon.ico --add-data "assets;assets" main.py
@@ -97,7 +97,7 @@ pyinstaller -windowed -F -y -n up2b --version-file version --collect-binaries cl
 pyinstaller -windowed -y -n up2b --version-file version --collect-binaries clr_loader --clean -i ./assets/favicon.ico --add-data "assets;assets" main.py
 ```
 
-### 3 Linux安装脚本一键安装（默认使用qt）
+### 3 Linux 安装脚本一键安装（默认使用 qt）
 
 ```sh
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/thep0y/up2b-gui/main/install.sh)"
@@ -106,8 +106,6 @@ sh -c "$(curl -fsSL https://raw.githubusercontent.com/thep0y/up2b-gui/main/insta
 ## 使用
 
 本项目提供路过图床(imgtu.com)的测试账号用于体验，用户名和密码皆为`timg_test`，请勿将测试账号用于非法用途。
-
-
 
 进入项目根目录，执行：
 
@@ -123,5 +121,4 @@ python main.py
 
 ## 附言
 
-因为依赖`up2b`，所以也就可以根据[up2b](https://github.com/thep0y/up2b)的README在`Typora`中使用。
-
+因为依赖`up2b`，所以也就可以根据[up2b](https://github.com/thep0y/up2b)的 README 在`Typora`中使用。

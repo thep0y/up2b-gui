@@ -1,0 +1,11 @@
+Package: up2b
+Version: 0.1.0.0
+Architecture: amd64
+Maintainer: thepoy@163.com
+Homepage: https://github.com/thep0y/up2b-gui
+Depends: python3-pip,python3-venv
+Recommends:
+Suggests:
+Section: utils
+Priority: optional
+Description: 图床管理工具
