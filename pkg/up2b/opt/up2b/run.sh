@@ -10,3 +10,20 @@ if [ ! -d $venv_dir ]; then
 fi
 
 $venv_dir/bin/python /opt/up2b/main.py
+
+local_bin=$HOME/.local/bin
+if [ ! -d $local_bin ]; then
+    mkdir $local_bin
+else
+    if [ ! $PATH =~ $local_bin ]; then
+        _env='export $PATH=$HOME/.local/bin:$PATH'
+        if [ $SHELL == '/bin/bash' ]; then
+            echo $_env >> $HOME/.bash_profile
+        elif [ $SHELL == '/bin/zsh' ]; then
+            echo $_env >> $HOME/.zshenv
+        fi
+    fi
+fi
+if [ ! -f $local_bin/bin ]; then
+    ln -s $venv_dir/bin/up2b $local_bin/bin
+fi
