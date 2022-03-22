@@ -1,5 +1,3 @@
-[电报群](https://t.me/py_up2b)
-
 # up2b
 
 基于[pywebview](https://github.com/r0x0r/pywebview)和[up2b](https://github.com/thep0y/up2b)写的图床管理软件。
@@ -22,11 +20,10 @@ https://user-images.githubusercontent.com/51874567/159233149-22a09854-32ab-4b59-
 当前为测试版，功能有：
 
 - 上传图片
-  - 多图上传，一次最多上传 10 张图片
-  - 上传成功后单击图片即可复制图片链接
+  - 上传页面最多保留 20 条上传记录
+  - 上传成功后鼠标在缩略图上悬浮可复制图片链接
 - 查看所有图片
-  - 12 张图片为一组
-  - 单击图片可查看原图
+  - 缩略图上有图片预览按钮
     - 直接拖拽原图到本地可保存为本地图片
   - 单击复制按钮复制图片链接
   - 单击删除按钮在图床里删除此图
@@ -71,7 +68,7 @@ linux第一次启动时由于需要安装一些依赖会比较慢，耐心等待
 
 打包为一个 exe：
 
-```po
+```powershell
 pyinstaller -windowed -F -y -n up2b --version-file version --collect-binaries clr_loader --clean -i ./assets/favicon.ico --add-data "assets;assets" main.py
 ```
 
