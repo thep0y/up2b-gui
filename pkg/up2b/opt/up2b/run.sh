@@ -24,6 +24,6 @@ else
         fi
     fi
 fi
-if [ ! -f $local_bin/bin ]; then
-    ln -s $venv_dir/bin/up2b $local_bin/bin
+if [ ! -f $local_bin/bin/up2b ]; then
+    ln -s $venv_dir/bin/up2b $local_bin/bin/up2b
 fi
