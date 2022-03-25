@@ -4,19 +4,20 @@
 # @Email:     thepoy@163.com
 # @File Name: apis.py
 # @Created:   2022-03-17 12:57:02
-# @Modified:  2022-03-21 13:33:05
+# @Modified:  2022-03-25 11:58:31
 
 import os
 import webview
 
 from typing import Dict, List, Optional, Union
 from up2b import IMAGE_BEDS
-from up2b.up2b_lib.up2b_api import CONF_FILE, GitBase, choose_image_bed
+from up2b.up2b_lib.up2b_api import GitBase, choose_image_bed
 from up2b.up2b_lib.up2b_api.sm import SM
 from up2b.up2b_lib.up2b_api.imgtu import Imgtu
 from up2b.up2b_lib.up2b_api.gitee import Gitee
 from up2b.up2b_lib.up2b_api.github import Github
 from up2b.up2b_lib.constants import (
+    CONF_FILE,
     SM_MS,
     IMGTU,
     GITEE,
