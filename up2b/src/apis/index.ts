@@ -59,6 +59,13 @@ export function previewInNewWindow(r: PreviewRequest, callback: (r: CommonRespon
 export function getAllImages(callback: (r: ImageListResponse) => void) {
     request('/getAllImages', 'GET').then(r => {
         const resp: ImageListResponse = r.data
+
+        const ts = new Date().getTime();
+
+        resp.urls.forEach(v => {
+            v.url = v.url + '?ts=' + ts
+        })
+
         callback(resp)
     })
 }
