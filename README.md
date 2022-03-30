@@ -12,7 +12,6 @@ https://user-images.githubusercontent.com/51874567/159233149-22a09854-32ab-4b59-
 
 - sm.ms
 - imgtu.com
-- gitee.com
 - github.com
 
 理论上支持图片的自动压缩，但肯定不完美，超过图床限制大小的图片依然建议手动调整。

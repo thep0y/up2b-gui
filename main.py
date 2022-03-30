@@ -4,14 +4,14 @@
 # @Email:     thepoy@163.com
 # @File Name: main.py
 # @Created:   2021-02-19 16:43:08
-# @Modified:  2022-03-22 16:56:49
+# @Modified:  2022-03-30 21:14:51
 
 import os
 import sys
-import platform
 import webview
 
-from up2b.up2b_lib.utils import logger, is_debug
+from up2b.up2b_lib.utils import logger
+from colorful_logger.logger import is_debug
 from server import app
 from server.apis import Api
 
@@ -34,7 +34,7 @@ if sys.platform == "linux":
     else:
         os.environ["QT_AUTO_SCREEN_SCALE_FACTOR"] = "1"  # 自动配置缩放，可能会使用不正确的缩放比例
 
-__version__ = "0.1.0.0 beta"
+__version__ = "0.1.0.1 beta"
 
 api = Api()
 

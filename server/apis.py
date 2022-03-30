@@ -4,24 +4,22 @@
 # @Email:     thepoy@163.com
 # @File Name: apis.py
 # @Created:   2022-03-17 12:57:02
-# @Modified:  2022-03-25 11:58:31
+# @Modified:  2022-03-30 22:16:19
 
 import os
+from up2b.up2b_lib.custom_types import ErrorResponse
 import webview
 
 from typing import Dict, List, Optional, Union
+from requests.exceptions import ConnectionError
 from up2b import IMAGE_BEDS
 from up2b.up2b_lib.up2b_api import GitBase, choose_image_bed
 from up2b.up2b_lib.up2b_api.sm import SM
 from up2b.up2b_lib.up2b_api.imgtu import Imgtu
-from up2b.up2b_lib.up2b_api.gitee import Gitee
 from up2b.up2b_lib.up2b_api.github import Github
 from up2b.up2b_lib.constants import (
     CONF_FILE,
-    SM_MS,
-    IMGTU,
-    GITEE,
-    GITHUB,
+    ImageBedCode,
     IS_WINDOWS,
 )
 from up2b.up2b_lib.errors import OverSizeError, UploadFailed
@@ -33,7 +31,7 @@ if IS_WINDOWS:
 
 
 class Api:
-    image_bed_code: int
+    image_bed_code: Optional[ImageBedCode]
 
     def __init__(self):
         self.cancel_heavy_stuff_flag = False
@@ -49,11 +47,11 @@ class Api:
 
         assert isinstance(selected, int)
 
-        self.image_bed_code = selected
+        self.image_bed_code = ImageBedCode(selected) if selected >= 0 else None
 
     @property
-    def image_bed(self) -> Optional[Union[SM, Imgtu, Gitee, Github]]:
-        if self.image_bed_code == -1:
+    def image_bed(self) -> Optional[Union[SM, Imgtu, Github]]:
+        if self.image_bed_code is None:
             return None
 
         image_bed = IMAGE_BEDS[self.image_bed_code]()
@@ -65,7 +63,9 @@ class Api:
         assert isinstance(auth_data, list)
 
         response = {
-            "selected": self.image_bed.image_bed_code if self.image_bed else None,
+            "selected": self.image_bed_code.value
+            if self.image_bed_code is not None
+            else None,
             "save_beds": [i for i in range(len(auth_data)) if auth_data[i]],
             "types": [i().image_bed_type.value for i in IMAGE_BEDS.values()],
             "screensize": {"height": self.height, "width": self.width},
@@ -77,23 +77,18 @@ class Api:
 
         assert isinstance(img_bed_code, int)
 
-        self.image_bed_code = img_bed_code
+        self.image_bed_code = ImageBedCode(img_bed_code)
 
         # TODO: 判断条件需要修改为根据图床类型执行
-        if self.image_bed_code == SM_MS:
+        if self.image_bed_code == ImageBedCode.SM_MS:
             assert isinstance(self.image_bed, SM)
             if not self.image_bed.login(info["username"], info["password"]):  # type: ignore
                 return {"success": False, "error": "用户名或密码错误"}
-        elif self.image_bed_code == IMGTU:
+        elif self.image_bed_code == ImageBedCode.IMGTU:
             assert isinstance(self.image_bed, Imgtu)
             if not self.image_bed.login(info["username"], info["password"]):  # type: ignore
                 return {"success": False, "error": "用户名或密码错误"}
-        elif self.image_bed_code == GITEE:
-            assert isinstance(self.image_bed, GitBase)
-            self.image_bed.login(
-                info["token"], info["username"], info["repo"], info["folder"]  # type: ignore
-            )
-        elif self.image_bed_code == GITHUB:
+        elif self.image_bed_code == ImageBedCode.GITHUB:
             assert isinstance(self.image_bed, GitBase)
             self.image_bed.login(
                 info["token"], info["username"], info["repo"], info["folder"]  # type: ignore
@@ -109,13 +104,10 @@ class Api:
     def choose_image_bed(self, img_bed_code: int):
         try:
             choose_image_bed(img_bed_code)
-            self.image_bed_code = img_bed_code
+            self.image_bed_code = ImageBedCode(img_bed_code)
             return {"success": True}
         except Exception as e:
             return {"success": False, "error": e.args[0]}
-
-    def drag_file(self, file):
-        print(file)
 
     def upload_images(self):
         file_types = ("选择要上传的图片 (*.jpg;*.gif;*.png;*.jpeg)",)
@@ -155,17 +147,20 @@ class Api:
 
     def get_all_images(self):
         if self.image_bed:
-            images = self.image_bed.get_all_images()
-            return images
+            try:
+                images = self.image_bed.get_all_images()
+                return images
+            except ConnectionError:
+                return ErrorResponse(status_code=500, error="连接服务器失败")
 
     def view_image_in_new_windows(self, url: str, width: int, height: int):
         image_name = os.path.basename(url)
 
-        width_delta = 38 if IS_WINDOWS else 20
-        height_delta = 72 if IS_WINDOWS else 20
+        width_delta = 28 if IS_WINDOWS else 20
+        height_delta = 61 if IS_WINDOWS else 20
 
-        max_width = 1920 - 38
-        max_height = 1080 - 72
+        max_width = 1920 - 34
+        max_height = 1080 - 67
 
         # 最大窗口尺寸 1920x1080
         if width > max_width:
@@ -175,8 +170,6 @@ class Api:
         if height > max_height:
             width = int(float(width) * (max_height / height))
             height = max_height
-
-        print(width, height)
 
         webview.create_window(
             image_name,
@@ -201,5 +194,8 @@ class Api:
 
         if not result:
             return {"success": True}
+
+        if result.status_code == 400 and result.error == "图片已被删除，请耐心等待服务器刷新缓存":
+            return {"success": True, "msg": result.error}
 
         return {"success": False, "error": result.to_dict()}

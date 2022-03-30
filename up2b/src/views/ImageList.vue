@@ -75,7 +75,7 @@ const handlePicturePreview = (image: ImageListItemType) => {
     }
 
     previewInNewWindow({
-        url: image.url,
+        url: image.url.split('?')[0],
         width: width,
         height: height
     }, (r) => {
@@ -97,7 +97,7 @@ const handlePicturePreview = (image: ImageListItemType) => {
 }
 
 const copyURL = (image: ImageListItemType) => {
-    navigator.clipboard.writeText(image.url).then(() => {
+    navigator.clipboard.writeText(image.url.split('?')[0]).then(() => {
         ElMessage.success('图片链接已复制到剪贴板')
     }).catch(r => {
         ElMessage.error(r)
@@ -132,7 +132,11 @@ const handleRemove = (image: ImageListItemType) => {
 
         if (r.success) {
             props.imageList.splice(props.imageList.indexOf(image), 1)
-            ElMessage.success('已删除')
+            if (r.msg) {
+                ElMessage.success(r.msg)
+            } else {
+                ElMessage.success('已删除')
+            }
         } else {
             ElMessage.error(`删除失败：status_code=${(r.error as ErrorObject).status_code}, error=${(r.error as ErrorObject).error}`)
         }

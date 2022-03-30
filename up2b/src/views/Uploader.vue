@@ -200,11 +200,11 @@ const handleSuccess = (resp: UploadResponse) => {
         if (r.success) {
             let map: { [key: string]: boolean } = {}
             props.imageList.forEach(v => {
-                map[v.url] = true
+                map[v.url.split('?')[0]] = true
             })
 
             r.urls.forEach(v => {
-                if (!map[v.url]) {
+                if (!map[v.url.split('?')[0]]) {
                     props.imageList.push(v)
                 }
             })

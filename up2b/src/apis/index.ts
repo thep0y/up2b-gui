@@ -17,6 +17,7 @@ const request = (url: string, method: Method, data?: string) => {
         url: import.meta.env.VITE_APP_BASE_API + url,
         method: method,
         data: data,
+        timeout: 100000, // 10s 超时时间
         headers: method == 'GET' ? undefined : { 'Content-Type': 'application/json' }
     })
 }

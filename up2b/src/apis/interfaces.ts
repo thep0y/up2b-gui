@@ -39,6 +39,7 @@ export interface ErrorObject {
 export interface ErrorResponse {
     success: boolean
     error: string | ErrorObject
+    msg?: string
 }
 
 export interface GitConfig {

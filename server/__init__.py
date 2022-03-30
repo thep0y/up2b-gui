@@ -4,7 +4,7 @@
 # @Email:     thepoy@163.com
 # @File Name: __init__.py
 # @Created:   2022-03-17 11:44:25
-# @Modified:  2022-03-21 13:26:28
+# @Modified:  2022-03-30 21:32:24
 
 import time
 
@@ -51,7 +51,7 @@ async def init_image_bed():
     data = request.get_json()
     result = api.init_image_bed(data)
     if not result["success"]:
-        api.image_bed_code = -1
+        api.image_bed_code = None
 
     return jsonify(result)
 
