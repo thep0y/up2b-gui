@@ -79,7 +79,11 @@ const getAllImagesEvent = (pane: TabsPaneContext) => {
       if (r.success) {
         imageListRef.value = r.urls
       } else {
-        ElMessage.error((r.error as string))
+        if (typeof r.error === 'string') {
+          ElMessage.error(r.error)
+        } else {
+          ElMessage.error(`状码码：${r.error.status_code}\n错误：${r.error.error}`)
+        }
       }
     })
   }

@@ -63,9 +63,11 @@ export function getAllImages(callback: (r: ImageListResponse) => void) {
 
         const ts = new Date().getTime();
 
-        resp.urls.forEach(v => {
-            v.url = v.url + '?ts=' + ts
-        })
+        if (resp.urls) {
+            resp.urls.forEach(v => {
+                v.url = v.url + '?ts=' + ts
+            })
+        }
 
         callback(resp)
     })
