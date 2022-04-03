@@ -4,7 +4,11 @@
 # @Email:     thepoy@163.com
 # @File Name: __init__.py
 # @Created:   2022-03-17 11:44:25
+<<<<<<< HEAD
 # @Modified:  2022-04-03 18:12:22
+=======
+# @Modified:  2022-03-31 12:11:34
+>>>>>>> origin/main
 
 import time
 
@@ -14,7 +18,7 @@ from up2b.up2b_lib.up2b_api.coding import Coding
 from up2b.up2b_lib.up2b_api.imgtu import Imgtu
 from up2b.up2b_lib.up2b_api.sm import SM
 from up2b.up2b_lib.up2b_api.github import Github
-from server.consts import ASSETS_DIR, GET, INDEX_PATH, POST, STATIC_DIR
+from server.consts import ASSETS_DIR, CONNECT_ERROR, GET, INDEX_PATH, POST, STATIC_DIR
 from server.apis import Api
 from server.types import (
     CODING_DELETE_PARAMS,
@@ -79,6 +83,7 @@ def upload():
     if not api.image_bed:
         return jsonify(success=False, error="尚未配置或选择图床"), 401
 
+<<<<<<< HEAD
     result = api.image_bed.upload_image_stream(
         ImageStream(
             file.filename,
@@ -89,8 +94,26 @@ def upload():
 
     if isinstance(result, str):
         return jsonify(success=True, url=result)
+=======
+    if isinstance(api.image_bed, Github):
+        time.sleep(1)
 
-    return jsonify(success=False, error=result.to_dict()), result.status_code
+    try:
+        result = api.image_bed.upload_image_stream(
+            ImageStream(
+                file.filename,
+                file.stream.read(),
+                file.mimetype,
+            ),
+        )
+    except ConnectionError:
+        return jsonify(success=False, error=CONNECT_ERROR)
+    else:
+        if isinstance(result, str):
+            return jsonify(success=True, url=result)
+>>>>>>> origin/main
+
+        return jsonify(success=False, error=result.to_dict())
 
 
 @app.route("/getAllImages", methods=[GET])
@@ -133,5 +156,9 @@ async def delete():
     else:
         params = GIT_DELETE_PARAMS(data["sha"], data["delete_url"])
 
-    result = api.delete_image(params)
+    try:
+        result = api.delete_image(params)
+    except ConnectionError:
+        return jsonify(success=False, error=CONNECT_ERROR)
+
     return jsonify(result)

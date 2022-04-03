@@ -4,7 +4,11 @@
 # @Email:     thepoy@163.com
 # @File Name: apis.py
 # @Created:   2022-03-17 12:57:02
+<<<<<<< HEAD
 # @Modified:  2022-04-03 16:14:19
+=======
+# @Modified:  2022-03-31 12:10:35
+>>>>>>> origin/main
 
 import os
 from up2b.up2b_lib.custom_types import AuthData, ErrorResponse
@@ -23,6 +27,7 @@ from up2b.up2b_lib.constants import (
     IS_WINDOWS,
 )
 from up2b.up2b_lib.errors import OverSizeError, UploadFailed
+from server.consts import CONNECT_ERROR
 from server.utils import read_config
 from server.types import (
     GIT_DELETE_PARAMS,
@@ -162,7 +167,7 @@ class Api:
                 images = self.image_bed.get_all_images()
                 return images
             except ConnectionError:
-                return ErrorResponse(status_code=500, error="连接服务器失败")
+                return ErrorResponse(status_code=500, error=CONNECT_ERROR)
 
     def view_image_in_new_windows(self, url: str, width: int, height: int):
         image_name = os.path.basename(url)

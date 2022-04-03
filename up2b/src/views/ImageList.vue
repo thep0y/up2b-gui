@@ -144,7 +144,11 @@ const handleRemove = (image: ImageListItemType) => {
                 ElMessage.success('已删除')
             }
         } else {
-            ElMessage.error(`删除失败：status_code=${(r.error as ErrorObject).status_code}, error=${(r.error as ErrorObject).error}`)
+            if (typeof r.error === 'string') {
+                ElMessage.error(r.error)
+            } else {
+                ElMessage.error(`状码码：${r.error.status_code}\n错误：${r.error.error}`)
+            }
         }
     })
 }

@@ -4,7 +4,7 @@
 # @Email:     thepoy@163.com
 # @File Name: consts.py
 # @Created:   2022-03-17 12:05:50
-# @Modified:  2022-03-19 10:23:42
+# @Modified:  2022-03-31 12:10:17
 
 import os
 
@@ -15,3 +15,6 @@ STATIC_DIR = os.path.join(ASSETS_DIR, "assets")
 
 POST = "POST"
 GET = "GET"
+
+
+CONNECT_ERROR = "网络异常"
