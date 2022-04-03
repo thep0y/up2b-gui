@@ -2,7 +2,7 @@
     <div id="image-list">
         <ul class="el-upload-list el-upload-list--picture-card">
             <li
-                v-for="item in imageList"
+                v-for="(item, index) in imageList"
                 :key="item.url"
                 class="el-upload-list__item is-success"
                 tabindex="0"
@@ -12,7 +12,7 @@
                         class="el-upload-list__item-thumbnail"
                         fit="contain"
                         :src="item.url"
-                        lazy
+                        :lazy="index < imageListLength"
                     />
                     <span class="el-upload-list__item-actions">
                         <span
@@ -60,6 +60,8 @@ import type { ImageListType, ImageListItemType, DeleteParamsType, ErrorObject } 
 import { previewInNewWindow, deleteImage, MessageDuration, getAllImages } from '../apis';
 
 const props = defineProps({ imageList: { type: Array as PropType<ImageListType>, required: true } })
+
+const imageListLength = props.imageList.length
 
 const handlePicturePreview = (image: ImageListItemType) => {
     let width: number, height: number
@@ -119,6 +121,10 @@ const handleRemove = (image: ImageListItemType) => {
     } else if ('id' in image) {
         params = {
             id: image.id
+        }
+    } else if ('filename' in image) {
+        params = {
+            filename: image.filename
         }
     } else {
         params = {

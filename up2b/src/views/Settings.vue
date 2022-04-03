@@ -94,12 +94,13 @@ let imageBedTypes: ImageBedType[] = []
 const selectedCode = ref(-1)
 
 const options = ref(([] as Option[]))
-ImageCodes.forEach((v, i) => {
+for (const i in ImageCodes) {
+  const key = Number(i)
   options.value.push({
-    value: i,
-    label: v
+    value: key,
+    label: ImageCodes[key]
   })
-})
+}
 
 const configBedTags = ref(([] as Tag[]))
 const automaticCompression = ref(false)

@@ -66,6 +66,8 @@ const getAllImagesEvent = (pane: TabsPaneContext) => {
     return
   }
 
+  // TODO: 因为上传成功后的图片链接添加到数组中后图片列表组件不渲染图片，
+  // 所以这里每次点击图片列表标签时都强制刷新，以保证不会出现“白块”
   if (imageListRef.value.length == 0) {
     const loading = ElLoading.service({
       lock: true,
@@ -74,6 +76,7 @@ const getAllImagesEvent = (pane: TabsPaneContext) => {
     })
 
     getAllImages((r) => {
+      console.log(r)
       loading.close()
 
       if (r.success) {

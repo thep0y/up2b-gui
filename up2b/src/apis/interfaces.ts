@@ -77,6 +77,10 @@ export interface ImgtuDeleteParams {
     id: string
 }
 
+export interface CodingDeleteParams {
+    filename: string
+}
+
 export interface GitDeleteParams {
     sha: string
     delete_url: string
@@ -95,13 +99,17 @@ export interface ImgtuImageListItem extends ImgtuDeleteParams {
     height: number
 }
 
+export interface CodingImageListItem extends CodingDeleteParams {
+    url: string
+}
+
 export interface GitImageListItem extends GitDeleteParams {
     url: string
 }
 
-export type DeleteParamsType = SMMSDeleteParams | ImgtuDeleteParams | GitDeleteParams
+export type DeleteParamsType = SMMSDeleteParams | ImgtuDeleteParams | GitDeleteParams | CodingDeleteParams
 
-export type ImageListItemType = SMMSImageListItem | ImgtuImageListItem | GitImageListItem
+export type ImageListItemType = SMMSImageListItem | ImgtuImageListItem | GitImageListItem | CodingImageListItem
 
 export type ImageListType = Array<ImageListItemType>
 
