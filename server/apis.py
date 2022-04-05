@@ -4,11 +4,7 @@
 # @Email:     thepoy@163.com
 # @File Name: apis.py
 # @Created:   2022-03-17 12:57:02
-<<<<<<< HEAD
 # @Modified:  2022-04-03 16:14:19
-=======
-# @Modified:  2022-03-31 12:10:35
->>>>>>> origin/main
 
 import os
 from up2b.up2b_lib.custom_types import AuthData, ErrorResponse

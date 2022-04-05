@@ -4,20 +4,13 @@
 # @Email:     thepoy@163.com
 # @File Name: __init__.py
 # @Created:   2022-03-17 11:44:25
-<<<<<<< HEAD
 # @Modified:  2022-04-03 18:12:22
-=======
-# @Modified:  2022-03-31 12:11:34
->>>>>>> origin/main
-
-import time
 
 from flask import Flask, jsonify, send_from_directory, request
 from up2b.up2b_lib.custom_types import ErrorResponse, ImageStream
 from up2b.up2b_lib.up2b_api.coding import Coding
 from up2b.up2b_lib.up2b_api.imgtu import Imgtu
 from up2b.up2b_lib.up2b_api.sm import SM
-from up2b.up2b_lib.up2b_api.github import Github
 from server.consts import ASSETS_DIR, CONNECT_ERROR, GET, INDEX_PATH, POST, STATIC_DIR
 from server.apis import Api
 from server.types import (
@@ -28,17 +21,18 @@ from server.types import (
 )
 
 app = Flask(__name__, static_folder=STATIC_DIR, static_url_path="/assets")
+app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 api = Api()
 
 
 @app.route("/", methods=[GET])
-async def index():
+def index():
     with open(INDEX_PATH) as f:
         return f.read()
 
 
 @app.route("/favicon.ico", methods=[GET])
-async def favicon():
+def favicon():
     return send_from_directory(
         ASSETS_DIR,
         "favicon.ico",
@@ -47,17 +41,17 @@ async def favicon():
 
 
 @app.route("/getImageBeds")
-async def get_image_beds():
+def get_image_beds():
     return jsonify(api.show_image_beds())
 
 
 @app.route("/chooseImageBed/<int:code>")
-async def choose_image_bed(code: int):
+def choose_image_bed(code: int):
     return jsonify(api.choose_image_bed(code))
 
 
 @app.route("/init", methods=[POST])
-async def init_image_bed():
+def init_image_bed():
     data = request.get_json()
     result = api.init_image_bed(data)
     if not result["success"]:
@@ -67,7 +61,7 @@ async def init_image_bed():
 
 
 @app.route("/ac/<int:status>", methods=[GET])
-async def toggle_automatic_compression(status: int):
+def toggle_automatic_compression(status: int):
     return jsonify(api.toggle_automatic_compression(status == 1))
 
 
@@ -83,41 +77,24 @@ def upload():
     if not api.image_bed:
         return jsonify(success=False, error="尚未配置或选择图床"), 401
 
-<<<<<<< HEAD
-    result = api.image_bed.upload_image_stream(
-        ImageStream(
-            file.filename,
-            file.stream.read(),
-            file.mimetype,
-        ),
-    )
+    print("上传 ->", file.filename)
 
-    if isinstance(result, str):
-        return jsonify(success=True, url=result)
-=======
-    if isinstance(api.image_bed, Github):
-        time.sleep(1)
+    stream = ImageStream(file.filename, file.stream.read(), file.mimetype)
 
     try:
-        result = api.image_bed.upload_image_stream(
-            ImageStream(
-                file.filename,
-                file.stream.read(),
-                file.mimetype,
-            ),
-        )
+        result = api.image_bed.upload_image_stream(stream)
+        print("上传结束 ->", file.filename, result)
     except ConnectionError:
         return jsonify(success=False, error=CONNECT_ERROR)
     else:
         if isinstance(result, str):
             return jsonify(success=True, url=result)
->>>>>>> origin/main
 
         return jsonify(success=False, error=result.to_dict())
 
 
 @app.route("/getAllImages", methods=[GET])
-async def get_all_images():
+def get_all_images():
     images = api.get_all_images()
     if images is None:
         return jsonify(success=False, error="尚未配置或选择图床")
@@ -129,7 +106,7 @@ async def get_all_images():
 
 
 @app.route("/preview", methods=[POST])
-async def preview():
+def preview():
     data = request.get_json()
 
     assert data is not None
@@ -142,7 +119,7 @@ async def preview():
 
 
 @app.route("/delete", methods=[POST])
-async def delete():
+def delete():
     data = request.get_json()
 
     assert data is not None

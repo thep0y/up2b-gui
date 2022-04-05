@@ -99,7 +99,6 @@ import { UploadFilled, Remove, Check, ZoomIn, CopyDocument, Delete } from '@elem
 import { UploadAjaxError } from 'element-plus/es/components/upload/src/ajax';
 import type { UploadResponse, ErrorResponse, ImageListType, ErrorObject } from '../apis';
 import { previewInNewWindow, getAllImages, MessageDuration } from '../apis';
-import bus from '../apis/bus';
 
 const props = defineProps({ imageList: { type: Array as PropType<ImageListType>, required: true } })
 
@@ -198,7 +197,6 @@ const handleSuccess = (resp: UploadResponse) => {
     }
 
     getAllImages((r) => {
-        console.log('获取图片列表')
         if (r.success) {
             let map: { [key: string]: boolean } = {}
             props.imageList.forEach(v => {
@@ -207,8 +205,6 @@ const handleSuccess = (resp: UploadResponse) => {
 
             r.urls.forEach(v => {
                 if (!map[v.url.split('?')[0]]) {
-                    console.log('添加事件')
-                    // bus.emit('add', v)
                     props.imageList.push(v)
                 }
             })

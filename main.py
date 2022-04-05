@@ -17,6 +17,9 @@ from server.apis import Api
 
 
 def get_distro() -> str:
+    if not os.path.exists("/etc/os-version"):
+        return ""
+
     with open("/etc/os-version") as f:
         lines = f.readlines()
         lines = lines[1:]
